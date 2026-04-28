@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Магнит Планер — прототип</title>
+
+  <style>
+    :root {
+      --red: #e30613;
+      --red-dark: #c9000b;
+      --red-soft: #ff3b45;
+      --pink: #ff5f7a;
+      --white: #ffffff;
+      --gray-bg: #f4f4f6;
+      --gray-light: #f0f0f2;
+      --gray: #8b8b95;
+      --text: #1f1f24;
+      --muted: #6f6f78;
+      --shadow: 0 16px 40px rgba(25, 25, 30, 0.12);
+      --card-shadow: 0 8px 22px rgba(25, 25, 30, 0.08);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(227, 6, 19, 0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(255, 95, 122, 0.18), transparent 28%),
+        var(--gray-bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 420px;
+      height: 820px;
+      max-height: calc(100vh - 44px);
+      background: var(--white);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      height: 100%;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #fff 0%, #fff 62%, #fafafa 100%);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .screen::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .hero {
+      position: relative;
+      padding: 24px 22px 28px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.34), transparent 28%),
+        linear-gradient(135deg, var(--red) 0%, var(--red-soft) 58%, #ff7a43 100%);
+      color: var(--white);
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -62px;
+      top: -48px;
+      background: rgba(255, 255, 255, 0.17);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      left: -36px;
+      bottom: -42px;
+      background: rgba(255, 255, 255, 0.13);
+      border-radius: 50%;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: 18px;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--white);
+      color: var(--red);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .step {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+      max-width: 330px;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      font-size: 15px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 310px;
+    }
+
+    .progress {
+      position: relative;
+      z-index: 2;
+      margin-top: 22px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.24);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--white);
+    }
+
+    .content {
+      position: relative;
+      padding: 22px;
+    }
+
+    .soft-bg-icon {
+      position: absolute;
+      right: 18px;
+      top: 8px;
+      font-size: 86px;
+      opacity: 0.055;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .option {
+      border: 0;
+      width: 100%;
+      text-align: left;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 17px 16px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.18s ease;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(25, 25, 30, 0.11);
+    }
+
+    .option.selected {
+      background: linear-gradient(135deg, var(--red) 0%, var(--red-soft) 100%);
+      color: var(--white);
+    }
+
+    .option-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .option-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 15px;
+      background: #fff1f2;
+      color: var(--red);
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+    }
+
+    .option.selected .option-icon {
+      background: rgba(255, 255, 255, 0.18);
+      color: var(--white);
+    }
+
+    .option-title {
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .option-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+
+    .option.selected .option-desc {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #e2e2e6;
+      display: grid;
+      place-items: center;
+      flex: 0 0 22px;
+      font-size: 12px;
+      color: transparent;
+    }
+
+    .option.selected .check {
+      border-color: rgba(255, 255, 255, 0.85);
+      background: var(--white);
+      color: var(--red);
+    }
+
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .chip {
+      border: 0;
+      background: var(--white);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 13px 15px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 740;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .chip.selected {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px 15px;
+      border-radius: var(--radius-sm);
+      background: #fff6f6;
+      color: #5d2226;
+      font-size: 13px;
+      line-height: 1.35;
+      position: relative;
+      z-index: 2;
+    }
+
+    .input-card {
+      position: relative;
+      z-index: 2;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      padding: 18px 16px;
+      border: 1px solid rgba(20, 20, 25, 0.05);
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 760;
+      color: var(--text);
+    }
+
+    .plan-input {
+      width: 100%;
+      border: 1.5px solid #e5e5eb;
+      border-radius: 18px;
+      padding: 15px 16px;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--text);
+      background: #fcfcfd;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .plan-input:focus {
+      border-color: rgba(227, 6, 19, 0.7);
+      box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
+      background: var(--white);
+    }
+
+    .field-hint {
+      margin: 10px 0 0;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .bottom {
+      padding: 18px 22px 22px;
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 10px;
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), #fff 28%);
+      z-index: 5;
+    }
+
+    .bottom.single {
+      grid-template-columns: 1fr;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 16px 17px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      transition: 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 10px 22px rgba(227, 6, 19, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--red-dark);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--text);
+    }
+
+    .small-caption {
+      margin-top: 12px;
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    /* Result page */
+
+    .result-hero {
+      padding-bottom: 24px;
+    }
+
+    .result-content {
+      padding: 18px 16px 22px;
+    }
+
+    .recipe-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .recipe-card {
+      position: relative;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      padding: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(20,20,25,0.04);
+    }
+
+    .recipe-card.best {
+      border: 1.5px solid rgba(227, 6, 19, 0.28);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff0f1;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 10px;
+    }
+
+    .recipe-top {
+      display: grid;
+      grid-template-columns: 1fr 86px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .recipe-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+    }
+
+    .food-photo {
+      width: 86px;
+      height: 86px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
+        linear-gradient(135deg, #ffe1c5, #ffb36d);
+      display: grid;
+      place-items: center;
+      font-size: 39px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.42);
+    }
+
+    .food-photo.green {
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
+        linear-gradient(135deg, #e5ffe4, #8ddf85);
+    }
+
+    .food-photo.yellow {
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
+        linear-gradient(135deg, #fff0b8, #ffcc4d);
+    }
+
+    .meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 11px;
+    }
+
+    .meta span {
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: #f4f4f6;
+      font-size: 12px;
+      font-weight: 780;
+      color: #43434a;
+    }
+
+    .kbju {
+      margin: 12px 0 0;
+      font-size: 13px;
+      font-weight: 760;
+      color: #323238;
+      line-height: 1.35;
+    }
+
+    .ingredients {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+
+    .recipe-actions {
+      margin-top: 13px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .choose-btn {
+      border: 0;
+      background: var(--red);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .mini-link {
+      border: 0;
+      background: #f2f2f4;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .result-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 16px 16px 22px;
+    }
+
+    .result-bottom.single {
+      grid-template-columns: 1fr;
+    }
+
+    .suggestion-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .suggestion-card {
+      background: var(--white);
+      border-radius: 22px;
+      box-shadow: var(--card-shadow);
+      padding: 14px;
+      border: 1px solid rgba(20, 20, 25, 0.05);
+    }
+
+    .suggestion-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .suggestion-title {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .suggestion-price {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff0f1;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .suggestion-desc {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .suggestion-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .suggestion-meta span {
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: #f4f4f6;
+      font-size: 12px;
+      font-weight: 780;
+      color: #43434a;
+    }
+
+    .more-tile {
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff4f4 0%, #fff0f1 100%);
+      color: #7b2229;
+      font-size: 14px;
+      font-weight: 760;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(227, 6, 19, 0.08);
+    }
+
+    @media (max-height: 760px) {
+      .phone {
+        height: calc(100vh - 20px);
+        max-height: none;
+      }
+
+      body {
+        padding: 10px;
+      }
+
+      .hero {
+        padding-top: 20px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 0;
+        background: var(--white);
+      }
+
+      .phone {
+        max-width: none;
+        width: 100%;
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="phone">
+
+    <!-- PAGE 1 -->
+    <section class="screen active" id="page-1">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">1 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Что хочешь сегодня?</h1>
+          <p class="subtitle">Подберём рецепт и корзину под твой день</p>
+        </div>
+
+        <div class="progress"><span style="width: 16.6%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">🍽️</div>
+
+        <div class="options">
+          <button class="option selected">
+            <div class="option-main">
+              <div class="option-icon">👨‍🍳</div>
+              <div>
+                <div class="option-title">Приготовить самому</div>
+                <div class="option-desc">Подберём простой рецепт</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">⚡</div>
+              <div>
+                <div class="option-title">Быстро и без заморочек</div>
+                <div class="option-desc">Минимум готовки и действий</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">🥪</div>
+              <div>
+                <div class="option-title">Перекус / еда с собой</div>
+                <div class="option-desc">Для учёбы, офиса или дороги</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">🗓️</div>
+              <div>
+                <div class="option-title">Рацион на весь день</div>
+                <div class="option-desc">Завтрак, обед и ужин</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom single">
+        <button class="btn btn-primary" data-go="page-2">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section class="screen" id="page-2">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">2 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>На сколько человек?</h1>
+          <p class="subtitle">Рассчитаем порции и стоимость корзины</p>
+        </div>
+
+        <div class="progress"><span style="width: 33.3%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">🥘</div>
+
+        <div class="options">
+          <button class="option selected">
+            <div class="option-main">
+              <div class="option-icon">🙂</div>
+              <div>
+                <div class="option-title">1 человек</div>
+                <div class="option-desc">Одна порция на сегодня</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">👥</div>
+              <div>
+                <div class="option-title">2 человека</div>
+                <div class="option-desc">Ужин или обед на двоих</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">👨‍👩‍👧</div>
+              <div>
+                <div class="option-title">3–4 человека</div>
+                <div class="option-desc">Для компании или семьи</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">🍱</div>
+              <div>
+                <div class="option-title">С запасом на завтра</div>
+                <div class="option-desc">Чтобы осталось ещё на один приём</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <button class="btn btn-secondary" data-go="page-1">Назад</button>
+        <button class="btn btn-primary" data-go="page-4">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 4 -->
+    <section class="screen" id="page-4">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">3 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>На сколько дней рассчитываешь план?</h1>
+          <p class="subtitle">Подстроим покупки и рецепты под твой ритм</p>
+        </div>
+
+        <div class="progress"><span style="width: 50%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">📅</div>
+
+        <div class="input-card">
+          <label class="field-label" for="plan-days">Количество дней</label>
+          <input class="plan-input" id="plan-days" type="number" min="1" placeholder="Например, 5" value="5" />
+          <p class="field-hint">Можно указать любой срок, чтобы собрать план питания и корзину под нужный период.</p>
+        </div>
+
+        <div class="note">
+          Это поможет заранее посчитать объём покупок и подобрать более удобные рецепты.
+        </div>
+      </div>
+
+      <div class="bottom">
+        <button class="btn btn-secondary" data-go="page-2">Назад</button>
+        <button class="btn btn-primary" data-go="page-5">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 5 -->
+    <section class="screen" id="page-5">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">4 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Какой твой бюджет?</h1>
+          <p class="subtitle">Укажи сумму, и мы соберём план без лишних трат</p>
+        </div>
+
+        <div class="progress"><span style="width: 66.6%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">🧾</div>
+
+        <div class="input-card">
+          <label class="field-label" for="plan-budget">Бюджет в рублях</label>
+          <input class="plan-input" id="plan-budget" type="number" min="0" step="50" placeholder="Например, 3500" value="3500" />
+          <p class="field-hint">Ориентируемся на эту сумму при подборе продуктов и общего плана.</p>
+        </div>
+
+        <div class="note">
+          При необходимости бюджет можно будет скорректировать перед оформлением корзины.
+        </div>
+      </div>
+
+      <div class="bottom">
+        <button class="btn btn-secondary" data-go="page-4">Назад</button>
+        <button class="btn btn-primary" data-go="page-6">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 6 -->
+    <section class="screen" id="page-6">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">5 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Что важно по питанию?</h1>
+          <p class="subtitle">Подстроим рецепт под твой запрос</p>
+        </div>
+
+        <div class="progress"><span style="width: 83.3%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">🥗</div>
+
+        <div class="options">
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">⚖️</div>
+              <div>
+                <div class="option-title">Сбалансировано</div>
+                <div class="option-desc">Белки, жиры, углеводы без перекоса</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option selected">
+            <div class="option-main">
+              <div class="option-icon">🥚</div>
+              <div>
+                <div class="option-title">Больше белка</div>
+                <div class="option-desc">Сытнее и полезнее после активного дня</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">🌿</div>
+              <div>
+                <div class="option-title">Полегче по калориям</div>
+                <div class="option-desc">Без тяжёлого ужина</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+
+          <button class="option">
+            <div class="option-main">
+              <div class="option-icon">🍚</div>
+              <div>
+                <div class="option-title">Сытно надолго</div>
+                <div class="option-desc">Чтобы не хотелось перекусывать</div>
+              </div>
+            </div>
+            <div class="check">✓</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <button class="btn btn-secondary" data-go="page-5">Назад</button>
+        <button class="btn btn-primary" data-go="page-7">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 7 -->
+    <section class="screen" id="page-7">
+      <div class="hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">6 из 6</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Что исключить?</h1>
+          <p class="subtitle">Учтём аллергии и нелюбимые продукты</p>
+        </div>
+
+        <div class="progress"><span style="width: 100%;"></span></div>
+      </div>
+
+      <div class="content">
+        <div class="soft-bg-icon">✅</div>
+
+        <div class="chip-grid">
+          <button class="chip">Молочка</button>
+          <button class="chip">Глютен</button>
+          <button class="chip">Орехи</button>
+          <button class="chip">Рыба</button>
+          <button class="chip">Мясо</button>
+          <button class="chip">Острое</button>
+          <button class="chip">Сладкое</button>
+          <button class="chip selected">Ничего</button>
+        </div>
+
+        <div class="note">
+          Можно изменить товары перед заказом
+        </div>
+      </div>
+
+      <div class="bottom">
+        <button class="btn btn-secondary" data-go="page-6">Назад</button>
+        <button class="btn btn-primary" data-go="page-8">Дальше</button>
+      </div>
+    </section>
+
+    <!-- PAGE 8 RESULT -->
+    <section class="screen" id="page-8">
+      <div class="hero result-hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">Готово</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Вот что можно приготовить в ближайшие дни</h1>
+          <p class="subtitle">План на 5 дней · бюджет 3500 ₽ · больше белка</p>
+        </div>
+      </div>
+
+      <div class="result-content">
+        <div class="recipe-list">
+
+          <article class="recipe-card best">
+            <div class="badge">Лучший баланс</div>
+
+            <div class="recipe-top">
+              <div>
+                <h2 class="recipe-title">Курица с гречкой и овощами</h2>
+
+                <div class="meta">
+                  <span>20 мин</span>
+                  <span>≈ 360 ₽</span>
+                  <span>1 порция</span>
+                </div>
+              </div>
+
+              <div class="food-photo">🍗</div>
+            </div>
+
+            <p class="kbju">610 ккал · Б 42 · Ж 18 · У 68</p>
+            <p class="ingredients">
+              Куриная грудка, гречка, овощная смесь, йогуртовый соус
+            </p>
+
+            <div class="recipe-actions">
+              <button class="choose-btn">Выбрать</button>
+              <button class="mini-link">Состав</button>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-top">
+              <div>
+                <h2 class="recipe-title">Омлет с творогом и салатом</h2>
+
+                <div class="meta">
+                  <span>15 мин</span>
+                  <span>≈ 290 ₽</span>
+                  <span>1 порция</span>
+                </div>
+              </div>
+
+              <div class="food-photo green">🥚</div>
+            </div>
+
+            <p class="kbju">520 ккал · Б 38 · Ж 24 · У 34</p>
+            <p class="ingredients">
+              Яйца, творог, огурец, томаты, хлебцы
+            </p>
+
+            <div class="recipe-actions">
+              <button class="choose-btn">Выбрать</button>
+              <button class="mini-link">Состав</button>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-top">
+              <div>
+                <h2 class="recipe-title">Рис с тунцом и яйцом</h2>
+
+                <div class="meta">
+                  <span>15 мин</span>
+                  <span>≈ 340 ₽</span>
+                  <span>1 порция</span>
+                </div>
+              </div>
+
+              <div class="food-photo yellow">🍚</div>
+            </div>
+
+            <p class="kbju">590 ккал · Б 37 · Ж 17 · У 72</p>
+            <p class="ingredients">
+              Рис, тунец, яйцо, огурец, кукуруза
+            </p>
+
+            <div class="recipe-actions">
+              <button class="choose-btn">Выбрать</button>
+              <button class="mini-link">Состав</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <div class="result-bottom">
+        <button class="btn btn-secondary" data-go="page-9">Хочу добавить ещё</button>
+        <button class="btn btn-primary">Перейти в корзину</button>
+      </div>
+    </section>
+
+    <!-- PAGE 9 ADDITIONS -->
+    <section class="screen" id="page-9">
+      <div class="hero result-hero">
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">М</div>
+            <span>Магнит Планер</span>
+          </div>
+          <div class="step">Ещё идеи</div>
+        </div>
+
+        <div class="hero-content">
+          <h1>Хочешь добавить что-то ещё?</h1>
+          <p class="subtitle">Подобрали дополнения к твоему выбору: напитки, снеки и удобные мелочи для учебных дней</p>
+        </div>
+      </div>
+
+      <div class="result-content">
+        <div class="suggestion-list">
+          <article class="suggestion-card">
+            <div class="suggestion-top">
+              <h2 class="suggestion-title">Холодный кофе и банан</h2>
+              <span class="suggestion-price">≈ 180 ₽</span>
+            </div>
+            <p class="suggestion-desc">Быстрый вариант перед парами или между занятиями, если нужен лёгкий заряд энергии.</p>
+            <div class="suggestion-meta">
+              <span>напиток</span>
+              <span>быстро</span>
+              <span>студенту</span>
+            </div>
+          </article>
+
+          <article class="suggestion-card">
+            <div class="suggestion-top">
+              <h2 class="suggestion-title">Йогурт и гранола на перекус</h2>
+              <span class="suggestion-price">≈ 220 ₽</span>
+            </div>
+            <p class="suggestion-desc">Подходит к белковому плану и легко помещается в рюкзак, если нужно взять что-то с собой.</p>
+            <div class="suggestion-meta">
+              <span>снек</span>
+              <span>с собой</span>
+              <span>сытно</span>
+            </div>
+          </article>
+
+          <article class="suggestion-card">
+            <div class="suggestion-top">
+              <h2 class="suggestion-title">Ореховый микс и вода</h2>
+              <span class="suggestion-price">≈ 260 ₽</span>
+            </div>
+            <p class="suggestion-desc">Простой набор на долгий учебный день, когда нет времени нормально поесть между делами.</p>
+            <div class="suggestion-meta">
+              <span>перекус</span>
+              <span>на день</span>
+              <span>без готовки</span>
+            </div>
+          </article>
+
+          <article class="suggestion-card">
+            <div class="suggestion-top">
+              <h2 class="suggestion-title">Творожный десерт и чай</h2>
+              <span class="suggestion-price">≈ 210 ₽</span>
+            </div>
+            <p class="suggestion-desc">Небольшое дополнение к корзине, если хочется чего-то приятного без сильного выхода за бюджет.</p>
+            <div class="suggestion-meta">
+              <span>десерт</span>
+              <span>спокойный вечер</span>
+              <span>по бюджету</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="more-tile">Посмотреть ещё</div>
+
+        <p class="small-caption">
+          Эти рекомендации дополняют основной план и подходят под быстрый студенческий ритм.
+        </p>
+      </div>
+
+      <div class="result-bottom">
+        <button class="btn btn-secondary" data-go="page-8">Назад</button>
+        <button class="btn btn-primary">Перейти в корзину</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const screens = document.querySelectorAll(".screen");
+    const navButtons = document.querySelectorAll("[data-go]");
+
+    function showPage(pageId) {
+      screens.forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      const target = document.getElementById(pageId);
+      if (target) {
+        target.classList.add("active");
+        target.scrollTop = 0;
+      }
+    }
+
+    navButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const page = button.getAttribute("data-go");
+        showPage(page);
+      });
+    });
+
+    const optionGroups = document.querySelectorAll(".options");
+
+    optionGroups.forEach(group => {
+      const options = group.querySelectorAll(".option");
+
+      options.forEach(option => {
+        option.addEventListener("click", () => {
+          options.forEach(item => item.classList.remove("selected"));
+          option.classList.add("selected");
+        });
+      });
+    });
+
+    const chips = document.querySelectorAll(".chip");
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        if (chip.textContent.trim() === "Ничего") {
+          chips.forEach(item => item.classList.remove("selected"));
+          chip.classList.add("selected");
+          return;
+        }
+
+        const nothingChip = Array.from(chips).find(item => item.textContent.trim() === "Ничего");
+        if (nothingChip) nothingChip.classList.remove("selected");
+
+        chip.classList.toggle("selected");
+      });
+    });
+  </script>
+</body>
+</html>
