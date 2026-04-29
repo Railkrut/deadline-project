@@ -52,7 +52,6 @@
             }
         }
 
-        /* === ГЛАВНЫЙ ЭКРАН === */
         .top-section {
             background: linear-gradient(180deg, #ff8a3d 0%, #ff5a7a 55%, #ff3d6e 100%);
             padding: 44px 14px 16px;
@@ -568,7 +567,6 @@
             border-radius: 8px;
         }
 
-        /* === ОБЩИЕ ШАГИ ОПРОСА === */
         .step-header {
             background: linear-gradient(135deg, #ff1744 0%, #e60023 100%);
             color: #fff;
@@ -633,7 +631,6 @@
             padding: 20px;
         }
 
-        /* === БЮДЖЕТ === */
         .budget-display {
             text-align: center;
             margin: 10px 0 20px;
@@ -724,7 +721,6 @@
             margin-top: 12px;
         }
 
-        /* === ТИП ПИТАНИЯ === */
         .diet-options {
             display: flex;
             flex-direction: column;
@@ -793,7 +789,6 @@
             margin-top: 4px;
         }
 
-        /* === ВЫБОР ПЛАНА === */
         .plan-card {
             background: #fff;
             border: 2px solid #eee;
@@ -907,7 +902,6 @@
             border-radius: 8px;
         }
 
-        /* === РЕКОМЕНДАЦИИ (КОРЗИНА) === */
         .recom-summary {
             background: linear-gradient(135deg, #fff0f3, #fff);
             border-radius: 14px;
@@ -1055,7 +1049,6 @@
             font-weight: 700;
         }
 
-        /* === КНОПКА ВНИЗУ === */
         .footer-action {
             position: sticky;
             bottom: 0;
@@ -1091,7 +1084,6 @@
             cursor: not-allowed;
         }
 
-        /* === РЕЗУЛЬТАТ === */
         .result-screen {
             background: linear-gradient(180deg, #fff0f3 0%, #fff 50%);
             min-height: 844px;
@@ -1239,7 +1231,6 @@
             font-size: 14px;
         }
 
-        /* === ТОСТ === */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -1381,24 +1372,24 @@
                 </div>
                 <div class="step-num">ШАГ 1 ИЗ 3</div>
                 <div class="step-title">Какой у вас<br>бюджет на неделю?</div>
-                <div class="step-sub">Подберём рацион в рамках суммы</div>
+                <div class="step-sub">Подберём рацион на 7 дней в рамках суммы</div>
             </div>
             <div class="step-body">
                 <div class="budget-display">
                     <div class="budget-amount">
-                        <input type="number" id="budgetInput" value="1500" min="500" max="10000" step="100">
+                        <input type="number" id="budgetInput" value="2000" min="700" max="15000" step="100">
                         <span>₽</span>
                     </div>
-                    <div class="budget-period">на 5 дней · ~<span id="perDay">300</span> ₽/день</div>
+                    <div class="budget-period">на 7 дней · ~<span id="perDay">286</span> ₽/день</div>
                 </div>
-                <input type="range" min="500" max="5000" step="100" value="1500" class="budget-slider"
+                <input type="range" min="700" max="7000" step="100" value="2000" class="budget-slider"
                     id="budgetSlider">
                 <div class="budget-presets">
-                    <button class="budget-preset" data-v="1000">1 000 ₽</button>
-                    <button class="budget-preset active" data-v="1500">1 500 ₽</button>
-                    <button class="budget-preset" data-v="2500">2 500 ₽</button>
+                    <button class="budget-preset" data-v="1400">1 400 ₽</button>
+                    <button class="budget-preset active" data-v="2000">2 000 ₽</button>
                     <button class="budget-preset" data-v="3500">3 500 ₽</button>
                     <button class="budget-preset" data-v="5000">5 000 ₽</button>
+                    <button class="budget-preset" data-v="7000">7 000 ₽</button>
                     <button class="budget-preset" data-v="custom">Свой</button>
                 </div>
                 <div class="budget-info" id="budgetHint">
@@ -1483,7 +1474,7 @@
                 </div>
                 <div class="step-num">ШАГ 3 ИЗ 3</div>
                 <div class="step-title">3 готовых плана<br>для вас</div>
-                <div class="step-sub" id="plansSub">Бюджет 1 500 ₽ · ПП · 5 дней</div>
+                <div class="step-sub" id="plansSub">Бюджет 2 000 ₽ · ПП · 7 дней</div>
             </div>
             <div class="step-body" id="plansContainer"></div>
             <div class="footer-action">
@@ -1495,23 +1486,19 @@
         <div class="screen" id="screen-recom">
             <div class="step-header">
                 <button class="step-back" onclick="goTo('screen-plans')">‹</button>
-                <div class="step-num" id="recomCount">ВАША КОРЗИНА · 18 ПОЗИЦИЙ</div>
-                <div class="step-title" id="recomTitle">ПП-минимум на 5 дней</div>
+                <div class="step-num" id="recomCount">ВАША КОРЗИНА · 20 ПОЗИЦИЙ</div>
+                <div class="step-title" id="recomTitle">ПП-минимум на 7 дней</div>
                 <div class="step-sub">Завтрак · обед · ужин — всё включено</div>
             </div>
-            <div class="step-body" id="recomBody">
-                <!-- генерируется JS -->
-            </div>
+            <div class="step-body" id="recomBody"></div>
             <div class="footer-action">
-                <button class="btn-primary" id="recomBtn" onclick="goTo('screen-result')">Оформить · 1 420 ₽</button>
+                <button class="btn-primary" id="recomBtn" onclick="goTo('screen-result')">Оформить · 1 890 ₽</button>
             </div>
         </div>
 
         <!-- ============ ЭКРАН 6: РЕЗУЛЬТАТ ============ -->
         <div class="screen" id="screen-result">
-            <div class="result-screen" id="resultContent">
-                <!-- генерируется JS -->
-            </div>
+            <div class="result-screen" id="resultContent"></div>
         </div>
 
     </div>
@@ -1519,6 +1506,8 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        const DAYS = 7;
+
         // === НАВИГАЦИЯ ===
         function goTo(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1534,10 +1523,10 @@
         const presets = document.querySelectorAll('.budget-preset');
 
         function getBudgetTier(val) {
-            if (val <= 1000) return 'ultra_low';
-            if (val <= 1500) return 'low';
-            if (val <= 2500) return 'medium';
-            if (val <= 3500) return 'high';
+            if (val <= 1400) return 'ultra_low';
+            if (val <= 2000) return 'low';
+            if (val <= 3500) return 'medium';
+            if (val <= 5000) return 'high';
             return 'premium';
         }
 
@@ -1545,20 +1534,20 @@
             const hint = document.getElementById('budgetHint');
             const tier = getBudgetTier(val);
             const hints = {
-                ultra_low: '<span>🔥</span><div>Супер-экономия! Подберём <b>максимум продуктов</b> за минимум денег. Акции М+ помогут сэкономить ещё ~15%</div>',
-                low: '<span>💡</span><div>Студенты экономят в среднем <b>22%</b> с Магнит Планером — за счёт скидок и кешбэка</div>',
-                medium: '<span>✨</span><div>Отличный бюджет! Хватит на <b>разнообразное и вкусное</b> питание с запасом на перекусы</div>',
-                high: '<span>🥑</span><div>Можно позволить <b>премиальные продукты</b> — лосось, авокадо, свежие ягоды. Экономия до <b>28%</b></div>',
-                premium: '<span>👑</span><div>Премиум-рацион! Включим <b>деликатесы, суперфуды</b> и фермерские продукты. Максимальный кешбэк М+</div>'
+                ultra_low: '<span>🔥</span><div>Супер-экономия! Подберём <b>максимум продуктов</b> за минимум денег на целую неделю. Акции М+ помогут сэкономить ещё ~15%</div>',
+                low: '<span>💡</span><div>Студенты экономят в среднем <b>22%</b> с Магнит Планером — за счёт скидок и кешбэка. Хватит на <b>полноценную неделю</b></div>',
+                medium: '<span>✨</span><div>Отличный бюджет на неделю! Хватит на <b>разнообразное и вкусное</b> питание с запасом на перекусы</div>',
+                high: '<span>🥑</span><div>Можно позволить <b>премиальные продукты</b> на всю неделю — лосось, авокадо, свежие ягоды. Экономия до <b>28%</b></div>',
+                premium: '<span>👑</span><div>Премиум-рацион на 7 дней! Включим <b>деликатесы, суперфуды</b> и фермерские продукты. Максимальный кешбэк М+</div>'
             };
             hint.innerHTML = hints[tier];
         }
 
         function updateBudget(val) {
-            val = Math.max(500, Math.min(10000, parseInt(val) || 500));
+            val = Math.max(700, Math.min(15000, parseInt(val) || 700));
             input.value = val;
-            if (val <= 5000) slider.value = val;
-            perDay.textContent = Math.round(val / 5);
+            if (val <= 7000) slider.value = val;
+            perDay.textContent = Math.round(val / DAYS);
             presets.forEach(p => {
                 p.classList.toggle('active', parseInt(p.dataset.v) === val);
             });
@@ -1588,145 +1577,144 @@
             updatePlansSub();
         }
 
-        // === ДИНАМИЧЕСКИЕ ПЛАНЫ (зависят от бюджета и типа питания) ===
+        // === ДИНАМИЧЕСКИЕ ПЛАНЫ ===
         function generatePlans(diet, budget) {
             const tier = getBudgetTier(budget);
-            const ratio = budget / 1500; // коэффициент масштабирования цены
 
             const allPlans = {
                 pp: {
                     ultra_low: [
-                        { name: 'ПП-эконом', emoji: '🥬', desc: 'Каши, яйца, сезонные овощи', kcal: '1 600', protein: '70', items: 14, priceRatio: 0.65, discountPct: 18, recommended: true },
-                        { name: 'Лёгкий старт', emoji: '🥒', desc: 'Минимальный набор для здорового питания', kcal: '1 500', protein: '60', items: 12, priceRatio: 0.60, discountPct: 15 },
-                        { name: 'ПП-базовый', emoji: '🥗', desc: 'Основные продукты + творог и фрукты', kcal: '1 700', protein: '78', items: 16, priceRatio: 0.68, discountPct: 20 }
+                        { name: 'ПП-эконом', emoji: '🥬', desc: 'Каши, яйца, сезонные овощи на неделю', kcal: '1 600', protein: '70', items: 16, priceRatio: 0.65, discountPct: 18, recommended: true },
+                        { name: 'Лёгкий старт', emoji: '🥒', desc: 'Минимальный набор для здорового питания', kcal: '1 500', protein: '60', items: 14, priceRatio: 0.60, discountPct: 15 },
+                        { name: 'ПП-базовый', emoji: '🥗', desc: 'Основные продукты + творог и фрукты', kcal: '1 700', protein: '78', items: 18, priceRatio: 0.68, discountPct: 20 }
                     ],
                     low: [
-                        { name: 'ПП-минимум', emoji: '🥗', desc: 'Базовый набор для лёгкого питания', kcal: '1 850', protein: '95', items: 18, priceRatio: 0.94, discountPct: 17, recommended: true },
-                        { name: 'ПП-актив', emoji: '💪', desc: 'Больше белка для тренировок', kcal: '2 100', protein: '130', items: 22, priceRatio: 0.98, discountPct: 15 },
-                        { name: 'ПП-вкусно', emoji: '🥑', desc: 'Авокадо, ягоды, полезные перекусы', kcal: '2 000', protein: '110', items: 20, priceRatio: 0.99, discountPct: 18 }
+                        { name: 'ПП-минимум', emoji: '🥗', desc: 'Базовый набор для лёгкого питания на 7 дней', kcal: '1 850', protein: '95', items: 20, priceRatio: 0.94, discountPct: 17, recommended: true },
+                        { name: 'ПП-актив', emoji: '💪', desc: 'Больше белка для тренировок', kcal: '2 100', protein: '130', items: 24, priceRatio: 0.98, discountPct: 15 },
+                        { name: 'ПП-вкусно', emoji: '🥑', desc: 'Авокадо, ягоды, полезные перекусы', kcal: '2 000', protein: '110', items: 22, priceRatio: 0.99, discountPct: 18 }
                     ],
                     medium: [
-                        { name: 'ПП-комфорт', emoji: '🥗', desc: 'Разнообразно и вкусно, свежие продукты', kcal: '2 000', protein: '105', items: 22, priceRatio: 0.92, discountPct: 16, recommended: true },
-                        { name: 'ПП-детокс', emoji: '🍵', desc: 'Зелёные смузи, суперфуды, лёгкие блюда', kcal: '1 700', protein: '85', items: 20, priceRatio: 0.88, discountPct: 20 },
-                        { name: 'ПП-фитнес', emoji: '🏃', desc: 'Белок + сложные углеводы для активных', kcal: '2 200', protein: '135', items: 24, priceRatio: 0.96, discountPct: 15 }
+                        { name: 'ПП-комфорт', emoji: '🥗', desc: 'Разнообразно и вкусно на всю неделю', kcal: '2 000', protein: '105', items: 26, priceRatio: 0.92, discountPct: 16, recommended: true },
+                        { name: 'ПП-детокс', emoji: '🍵', desc: 'Зелёные смузи, суперфуды, лёгкие блюда', kcal: '1 700', protein: '85', items: 22, priceRatio: 0.88, discountPct: 20 },
+                        { name: 'ПП-фитнес', emoji: '🏃', desc: 'Белок + сложные углеводы для активных', kcal: '2 200', protein: '135', items: 28, priceRatio: 0.96, discountPct: 15 }
                     ],
                     high: [
-                        { name: 'ПП-премиум', emoji: '🥑', desc: 'Лосось, авокадо, киноа, свежие ягоды', kcal: '2 100', protein: '120', items: 26, priceRatio: 0.90, discountPct: 18, recommended: true },
-                        { name: 'ПП-гурман', emoji: '🍣', desc: 'Красная рыба, микрозелень, суперфуды', kcal: '2 000', protein: '115', items: 24, priceRatio: 0.94, discountPct: 16 },
-                        { name: 'ПП-семейный', emoji: '👨‍👩‍👧', desc: 'На двоих — полезно и экономно', kcal: '1 900', protein: '100', items: 30, priceRatio: 0.96, discountPct: 22 }
+                        { name: 'ПП-премиум', emoji: '🥑', desc: 'Лосось, авокадо, киноа, свежие ягоды', kcal: '2 100', protein: '120', items: 30, priceRatio: 0.90, discountPct: 18, recommended: true },
+                        { name: 'ПП-гурман', emoji: '🍣', desc: 'Красная рыба, микрозелень, суперфуды', kcal: '2 000', protein: '115', items: 28, priceRatio: 0.94, discountPct: 16 },
+                        { name: 'ПП-семейный', emoji: '👨‍👩‍👧', desc: 'На двоих — полезно и экономно', kcal: '1 900', protein: '100', items: 34, priceRatio: 0.96, discountPct: 22 }
                     ],
                     premium: [
-                        { name: 'ПП-люкс', emoji: '👑', desc: 'Фермерские продукты, органика, суперфуды', kcal: '2 100', protein: '125', items: 28, priceRatio: 0.88, discountPct: 20, recommended: true },
-                        { name: 'ПП-детокс PRO', emoji: '🌿', desc: 'Спирулина, чиа, свежие соки каждый день', kcal: '1 800', protein: '90', items: 24, priceRatio: 0.85, discountPct: 18 },
-                        { name: 'ПП-максимум', emoji: '⭐', desc: 'Всё лучшее: рыба, мясо, овощи, ягоды', kcal: '2 300', protein: '140', items: 32, priceRatio: 0.92, discountPct: 22 }
+                        { name: 'ПП-люкс', emoji: '👑', desc: 'Фермерские продукты, органика, суперфуды', kcal: '2 100', protein: '125', items: 32, priceRatio: 0.88, discountPct: 20, recommended: true },
+                        { name: 'ПП-детокс PRO', emoji: '🌿', desc: 'Спирулина, чиа, свежие соки каждый день', kcal: '1 800', protein: '90', items: 28, priceRatio: 0.85, discountPct: 18 },
+                        { name: 'ПП-максимум', emoji: '⭐', desc: 'Всё лучшее: рыба, мясо, овощи, ягоды', kcal: '2 300', protein: '140', items: 36, priceRatio: 0.92, discountPct: 22 }
                     ]
                 },
                 normal: {
                     ultra_low: [
-                        { name: 'Студенческий мини', emoji: '🍜', desc: 'Лапша, яйца, хлеб, сосиски', kcal: '2 000', protein: '55', items: 12, priceRatio: 0.62, discountPct: 16, recommended: true },
-                        { name: 'Базовый набор', emoji: '🍞', desc: 'Хлеб, макароны, картошка, курица', kcal: '2 200', protein: '65', items: 14, priceRatio: 0.66, discountPct: 14 },
-                        { name: 'Эконом-сытый', emoji: '🥘', desc: 'Пельмени, каша, консервы', kcal: '2 400', protein: '60', items: 13, priceRatio: 0.64, discountPct: 18 }
+                        { name: 'Студенческий мини', emoji: '🍜', desc: 'Лапша, яйца, хлеб, сосиски на неделю', kcal: '2 000', protein: '55', items: 14, priceRatio: 0.62, discountPct: 16, recommended: true },
+                        { name: 'Базовый набор', emoji: '🍞', desc: 'Хлеб, макароны, картошка, курица', kcal: '2 200', protein: '65', items: 16, priceRatio: 0.66, discountPct: 14 },
+                        { name: 'Эконом-сытый', emoji: '🥘', desc: 'Пельмени, каша, консервы', kcal: '2 400', protein: '60', items: 15, priceRatio: 0.64, discountPct: 18 }
                     ],
                     low: [
-                        { name: 'Сытно и просто', emoji: '🍝', desc: 'Макароны, котлеты, картошка', kcal: '2 200', protein: '80', items: 19, priceRatio: 0.93, discountPct: 17, recommended: true },
-                        { name: 'Студенческий', emoji: '🍕', desc: 'Пельмени, сосиски, готовые блюда', kcal: '2 400', protein: '75', items: 17, priceRatio: 0.97, discountPct: 15 },
-                        { name: 'Домашний обед', emoji: '🥘', desc: 'Супы, гарниры, мясо', kcal: '2 100', protein: '90', items: 21, priceRatio: 0.99, discountPct: 16 }
+                        { name: 'Сытно и просто', emoji: '🍝', desc: 'Макароны, котлеты, картошка на 7 дней', kcal: '2 200', protein: '80', items: 22, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Студенческий', emoji: '🍕', desc: 'Пельмени, сосиски, готовые блюда', kcal: '2 400', protein: '75', items: 19, priceRatio: 0.97, discountPct: 15 },
+                        { name: 'Домашний обед', emoji: '🥘', desc: 'Супы, гарниры, мясо', kcal: '2 100', protein: '90', items: 24, priceRatio: 0.99, discountPct: 16 }
                     ],
                     medium: [
-                        { name: 'Домашняя кухня', emoji: '🍲', desc: 'Борщ, котлеты, пюре — как у мамы', kcal: '2 300', protein: '95', items: 24, priceRatio: 0.93, discountPct: 18, recommended: true },
-                        { name: 'Мясоед', emoji: '🥩', desc: 'Свинина, курица, колбаса + гарниры', kcal: '2 500', protein: '110', items: 22, priceRatio: 0.96, discountPct: 15 },
-                        { name: 'Разнообразный', emoji: '🍽️', desc: 'Всего понемногу: и мясо, и рыба, и овощи', kcal: '2 200', protein: '90', items: 26, priceRatio: 0.95, discountPct: 17 }
+                        { name: 'Домашняя кухня', emoji: '🍲', desc: 'Борщ, котлеты, пюре — как у мамы', kcal: '2 300', protein: '95', items: 28, priceRatio: 0.93, discountPct: 18, recommended: true },
+                        { name: 'Мясоед', emoji: '🥩', desc: 'Свинина, курица, колбаса + гарниры', kcal: '2 500', protein: '110', items: 26, priceRatio: 0.96, discountPct: 15 },
+                        { name: 'Разнообразный', emoji: '🍽️', desc: 'Всего понемногу: и мясо, и рыба, и овощи', kcal: '2 200', protein: '90', items: 30, priceRatio: 0.95, discountPct: 17 }
                     ],
                     high: [
-                        { name: 'Обильный стол', emoji: '🥘', desc: 'Мясо, рыба, сыры, выпечка', kcal: '2 400', protein: '105', items: 28, priceRatio: 0.91, discountPct: 19, recommended: true },
-                        { name: 'Гурман', emoji: '🧀', desc: 'Качественные колбасы, сыры, деликатесы', kcal: '2 300', protein: '100', items: 26, priceRatio: 0.94, discountPct: 17 },
-                        { name: 'Семейный ужин', emoji: '👨‍👩‍👧‍👦', desc: 'На семью — сытно и с запасом', kcal: '2 200', protein: '95', items: 32, priceRatio: 0.96, discountPct: 22 }
+                        { name: 'Обильный стол', emoji: '🥘', desc: 'Мясо, рыба, сыры, выпечка', kcal: '2 400', protein: '105', items: 32, priceRatio: 0.91, discountPct: 19, recommended: true },
+                        { name: 'Гурман', emoji: '🧀', desc: 'Качественные колбасы, сыры, деликатесы', kcal: '2 300', protein: '100', items: 30, priceRatio: 0.94, discountPct: 17 },
+                        { name: 'Семейный ужин', emoji: '👨‍👩‍👧‍👦', desc: 'На семью — сытно и с запасом', kcal: '2 200', protein: '95', items: 36, priceRatio: 0.96, discountPct: 22 }
                     ],
                     premium: [
-                        { name: 'Праздничный', emoji: '🎉', desc: 'Стейки, морепродукты, деликатесы', kcal: '2 500', protein: '120', items: 30, priceRatio: 0.89, discountPct: 20, recommended: true },
-                        { name: 'Фуди-набор', emoji: '🍱', desc: 'Необычные соусы, специи, импортные продукты', kcal: '2 200', protein: '100', items: 28, priceRatio: 0.92, discountPct: 18 },
-                        { name: 'Шеф-корзина', emoji: '👨‍🍳', desc: 'Всё для готовки ресторанных блюд дома', kcal: '2 400', protein: '115', items: 34, priceRatio: 0.94, discountPct: 22 }
+                        { name: 'Праздничный', emoji: '🎉', desc: 'Стейки, морепродукты, деликатесы', kcal: '2 500', protein: '120', items: 34, priceRatio: 0.89, discountPct: 20, recommended: true },
+                        { name: 'Фуди-набор', emoji: '🍱', desc: 'Необычные соусы, специи, импортные продукты', kcal: '2 200', protein: '100', items: 32, priceRatio: 0.92, discountPct: 18 },
+                        { name: 'Шеф-корзина', emoji: '👨‍🍳', desc: 'Всё для готовки ресторанных блюд дома', kcal: '2 400', protein: '115', items: 38, priceRatio: 0.94, discountPct: 22 }
                     ]
                 },
                 sport: {
                     ultra_low: [
-                        { name: 'Белок-минимум', emoji: '🥚', desc: 'Яйца, творог, курица, гречка', kcal: '2 100', protein: '110', items: 14, priceRatio: 0.65, discountPct: 16, recommended: true },
-                        { name: 'Сушка-эконом', emoji: '🏋️', desc: 'Минимум жира, максимум белка', kcal: '1 800', protein: '120', items: 13, priceRatio: 0.63, discountPct: 14 },
-                        { name: 'Масса-бюджет', emoji: '💪', desc: 'Калории из каш и молочки', kcal: '2 500', protein: '100', items: 15, priceRatio: 0.67, discountPct: 18 }
+                        { name: 'Белок-минимум', emoji: '🥚', desc: 'Яйца, творог, курица, гречка на неделю', kcal: '2 100', protein: '110', items: 16, priceRatio: 0.65, discountPct: 16, recommended: true },
+                        { name: 'Сушка-эконом', emoji: '🏋️', desc: 'Минимум жира, максимум белка', kcal: '1 800', protein: '120', items: 15, priceRatio: 0.63, discountPct: 14 },
+                        { name: 'Масса-бюджет', emoji: '💪', desc: 'Калории из каш и молочки', kcal: '2 500', protein: '100', items: 17, priceRatio: 0.67, discountPct: 18 }
                     ],
                     low: [
-                        { name: 'Спорт-базовый', emoji: '💪', desc: 'Курица, творог, гречка, овощи', kcal: '2 300', protein: '130', items: 20, priceRatio: 0.95, discountPct: 16, recommended: true },
-                        { name: 'Сушка-лайт', emoji: '🏃', desc: 'Высокий белок, минимум углеводов', kcal: '1 900', protein: '140', items: 18, priceRatio: 0.93, discountPct: 14 },
-                        { name: 'Набор массы', emoji: '🥩', desc: 'Много калорий из чистых продуктов', kcal: '2 800', protein: '120', items: 22, priceRatio: 0.98, discountPct: 15 }
+                        { name: 'Спорт-базовый', emoji: '💪', desc: 'Курица, творог, гречка, овощи на 7 дней', kcal: '2 300', protein: '130', items: 22, priceRatio: 0.95, discountPct: 16, recommended: true },
+                        { name: 'Сушка-лайт', emoji: '🏃', desc: 'Высокий белок, минимум углеводов', kcal: '1 900', protein: '140', items: 20, priceRatio: 0.93, discountPct: 14 },
+                        { name: 'Набор массы', emoji: '🥩', desc: 'Много калорий из чистых продуктов', kcal: '2 800', protein: '120', items: 24, priceRatio: 0.98, discountPct: 15 }
                     ],
                     medium: [
-                        { name: 'Спорт-комфорт', emoji: '🏆', desc: 'Разнообразный белок + сложные углеводы', kcal: '2 500', protein: '145', items: 24, priceRatio: 0.93, discountPct: 17, recommended: true },
-                        { name: 'Кроссфит-набор', emoji: '🔥', desc: 'Энергия для интенсивных тренировок', kcal: '2 700', protein: '130', items: 22, priceRatio: 0.95, discountPct: 15 },
-                        { name: 'Восстановление', emoji: '🧘', desc: 'Антиоксиданты, Омега-3, лёгкий белок', kcal: '2 100', protein: '110', items: 26, priceRatio: 0.92, discountPct: 18 }
+                        { name: 'Спорт-комфорт', emoji: '🏆', desc: 'Разнообразный белок + сложные углеводы', kcal: '2 500', protein: '145', items: 28, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Кроссфит-набор', emoji: '🔥', desc: 'Энергия для интенсивных тренировок', kcal: '2 700', protein: '130', items: 26, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Восстановление', emoji: '🧘', desc: 'Антиоксиданты, Омега-3, лёгкий белок', kcal: '2 100', protein: '110', items: 30, priceRatio: 0.92, discountPct: 18 }
                     ],
                     high: [
-                        { name: 'Спорт-про', emoji: '🥇', desc: 'Лосось, индейка, орехи, авокадо', kcal: '2 600', protein: '155', items: 28, priceRatio: 0.91, discountPct: 19, recommended: true },
-                        { name: 'Марафонец', emoji: '🏃‍♂️', desc: 'Углеводная загрузка + качественный белок', kcal: '2 800', protein: '135', items: 26, priceRatio: 0.93, discountPct: 17 },
-                        { name: 'Бодибилдер', emoji: '💪', desc: 'Максимум белка из натуральных продуктов', kcal: '2 400', protein: '170', items: 30, priceRatio: 0.95, discountPct: 20 }
+                        { name: 'Спорт-про', emoji: '🥇', desc: 'Лосось, индейка, орехи, авокадо', kcal: '2 600', protein: '155', items: 32, priceRatio: 0.91, discountPct: 19, recommended: true },
+                        { name: 'Марафонец', emoji: '🏃‍♂️', desc: 'Углеводная загрузка + качественный белок', kcal: '2 800', protein: '135', items: 30, priceRatio: 0.93, discountPct: 17 },
+                        { name: 'Бодибилдер', emoji: '💪', desc: 'Максимум белка из натуральных продуктов', kcal: '2 400', protein: '170', items: 34, priceRatio: 0.95, discountPct: 20 }
                     ],
                     premium: [
-                        { name: 'Спорт-элит', emoji: '🏅', desc: 'Стейки, морепродукты, суперфуды, орехи', kcal: '2 700', protein: '165', items: 32, priceRatio: 0.88, discountPct: 22, recommended: true },
-                        { name: 'Биохакер', emoji: '🧬', desc: 'MCT-масло, чиа, спирулина, фермерское мясо', kcal: '2 300', protein: '140', items: 28, priceRatio: 0.86, discountPct: 20 },
-                        { name: 'Чемпион', emoji: '🏆', desc: 'Полный рацион олимпийца из натуральных продуктов', kcal: '3 000', protein: '180', items: 36, priceRatio: 0.92, discountPct: 24 }
+                        { name: 'Спорт-элит', emoji: '🏅', desc: 'Стейки, морепродукты, суперфуды, орехи', kcal: '2 700', protein: '165', items: 36, priceRatio: 0.88, discountPct: 22, recommended: true },
+                        { name: 'Биохакер', emoji: '🧬', desc: 'MCT-масло, чиа, спирулина, фермерское мясо', kcal: '2 300', protein: '140', items: 32, priceRatio: 0.86, discountPct: 20 },
+                        { name: 'Чемпион', emoji: '🏆', desc: 'Полный рацион олимпийца из натуральных продуктов', kcal: '3 000', protein: '180', items: 40, priceRatio: 0.92, discountPct: 24 }
                     ]
                 },
                 veg: {
                     ultra_low: [
-                        { name: 'Веган-минимум', emoji: '🌱', desc: 'Крупы, бобовые, сезонные овощи', kcal: '1 700', protein: '55', items: 13, priceRatio: 0.60, discountPct: 16, recommended: true },
-                        { name: 'Постный набор', emoji: '🥕', desc: 'Картошка, морковь, капуста, горох', kcal: '1 800', protein: '50', items: 12, priceRatio: 0.58, discountPct: 14 },
-                        { name: 'Зелёный старт', emoji: '🥬', desc: 'Базовые овощи + яйца и молочка', kcal: '1 600', protein: '60', items: 14, priceRatio: 0.63, discountPct: 18 }
+                        { name: 'Веган-минимум', emoji: '🌱', desc: 'Крупы, бобовые, сезонные овощи на неделю', kcal: '1 700', protein: '55', items: 15, priceRatio: 0.60, discountPct: 16, recommended: true },
+                        { name: 'Постный набор', emoji: '🥕', desc: 'Картошка, морковь, капуста, горох', kcal: '1 800', protein: '50', items: 14, priceRatio: 0.58, discountPct: 14 },
+                        { name: 'Зелёный старт', emoji: '🥬', desc: 'Базовые овощи + яйца и молочка', kcal: '1 600', protein: '60', items: 16, priceRatio: 0.63, discountPct: 18 }
                     ],
                     low: [
-                        { name: 'Вегетарианский базовый', emoji: '🌱', desc: 'Крупы, овощи, яйца, молочные продукты', kcal: '1 900', protein: '70', items: 18, priceRatio: 0.93, discountPct: 16, recommended: true },
-                        { name: 'Лакто-вег', emoji: '🧀', desc: 'С сырами, йогуртами и молоком', kcal: '2 000', protein: '78', items: 20, priceRatio: 0.97, discountPct: 14 },
-                        { name: 'Ово-вег', emoji: '🥚', desc: 'С яйцами, без молочных продуктов', kcal: '1 800', protein: '72', items: 17, priceRatio: 0.95, discountPct: 17 }
+                        { name: 'Вегетарианский базовый', emoji: '🌱', desc: 'Крупы, овощи, яйца, молочные продукты', kcal: '1 900', protein: '70', items: 20, priceRatio: 0.93, discountPct: 16, recommended: true },
+                        { name: 'Лакто-вег', emoji: '🧀', desc: 'С сырами, йогуртами и молоком', kcal: '2 000', protein: '78', items: 22, priceRatio: 0.97, discountPct: 14 },
+                        { name: 'Ово-вег', emoji: '🥚', desc: 'С яйцами, без молочных продуктов', kcal: '1 800', protein: '72', items: 19, priceRatio: 0.95, discountPct: 17 }
                     ],
                     medium: [
-                        { name: 'Вег-комфорт', emoji: '🥗', desc: 'Тофу, хумус, разнообразные овощи', kcal: '2 000', protein: '80', items: 22, priceRatio: 0.92, discountPct: 17, recommended: true },
-                        { name: 'Средиземноморский', emoji: '🫒', desc: 'Оливки, томаты, сыр фета, зелень', kcal: '2 100', protein: '75', items: 24, priceRatio: 0.95, discountPct: 15 },
-                        { name: 'Азиатский вег', emoji: '🍜', desc: 'Тофу, рис, соевый соус, овощи вок', kcal: '1 900', protein: '70', items: 20, priceRatio: 0.90, discountPct: 18 }
+                        { name: 'Вег-комфорт', emoji: '🥗', desc: 'Тофу, хумус, разнообразные овощи', kcal: '2 000', protein: '80', items: 26, priceRatio: 0.92, discountPct: 17, recommended: true },
+                        { name: 'Средиземноморский', emoji: '🫒', desc: 'Оливки, томаты, сыр фета, зелень', kcal: '2 100', protein: '75', items: 28, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Азиатский вег', emoji: '🍜', desc: 'Тофу, рис, соевый соус, овощи вок', kcal: '1 900', protein: '70', items: 24, priceRatio: 0.90, discountPct: 18 }
                     ],
                     high: [
-                        { name: 'Вег-премиум', emoji: '🥑', desc: 'Авокадо, орехи, киноа, свежие ягоды', kcal: '2 100', protein: '85', items: 26, priceRatio: 0.90, discountPct: 18, recommended: true },
-                        { name: 'Суперфуд-вег', emoji: '🫐', desc: 'Чиа, годжи, кокос, миндальное молоко', kcal: '1 900', protein: '75', items: 24, priceRatio: 0.93, discountPct: 16 },
-                        { name: 'Вег-семейный', emoji: '👨‍👩‍👧', desc: 'Разнообразно для всей семьи', kcal: '2 000', protein: '80', items: 30, priceRatio: 0.95, discountPct: 22 }
+                        { name: 'Вег-премиум', emoji: '🥑', desc: 'Авокадо, орехи, киноа, свежие ягоды', kcal: '2 100', protein: '85', items: 30, priceRatio: 0.90, discountPct: 18, recommended: true },
+                        { name: 'Суперфуд-вег', emoji: '🫐', desc: 'Чиа, годжи, кокос, миндальное молоко', kcal: '1 900', protein: '75', items: 28, priceRatio: 0.93, discountPct: 16 },
+                        { name: 'Вег-семейный', emoji: '👨‍👩‍👧', desc: 'Разнообразно для всей семьи', kcal: '2 000', protein: '80', items: 34, priceRatio: 0.95, discountPct: 22 }
                     ],
                     premium: [
-                        { name: 'Вег-люкс', emoji: '👑', desc: 'Органические овощи, трюфели, орехи макадамия', kcal: '2 100', protein: '90', items: 28, priceRatio: 0.87, discountPct: 20, recommended: true },
-                        { name: 'Raw-вег', emoji: '🥝', desc: 'Сыроедческие блюда, смузи, проростки', kcal: '1 700', protein: '65', items: 24, priceRatio: 0.84, discountPct: 18 },
-                        { name: 'Эко-гурман', emoji: '🌻', desc: 'Фермерские овощи, крафтовые сыры, редкие крупы', kcal: '2 200', protein: '95', items: 32, priceRatio: 0.92, discountPct: 24 }
+                        { name: 'Вег-люкс', emoji: '👑', desc: 'Органические овощи, трюфели, орехи макадамия', kcal: '2 100', protein: '90', items: 32, priceRatio: 0.87, discountPct: 20, recommended: true },
+                        { name: 'Raw-вег', emoji: '🥝', desc: 'Сыроедческие блюда, смузи, проростки', kcal: '1 700', protein: '65', items: 28, priceRatio: 0.84, discountPct: 18 },
+                        { name: 'Эко-гурман', emoji: '🌻', desc: 'Фермерские овощи, крафтовые сыры, редкие крупы', kcal: '2 200', protein: '95', items: 36, priceRatio: 0.92, discountPct: 24 }
                     ]
                 },
                 any: {
                     ultra_low: [
-                        { name: 'Микс-эконом', emoji: '💰', desc: 'Максимум еды за минимум денег', kcal: '2 000', protein: '65', items: 14, priceRatio: 0.63, discountPct: 18, recommended: true },
-                        { name: 'Простой набор', emoji: '🛒', desc: 'Всё необходимое без излишеств', kcal: '1 900', protein: '60', items: 13, priceRatio: 0.60, discountPct: 15 },
-                        { name: 'Антикризис', emoji: '🔥', desc: 'Акционные товары + базовые продукты', kcal: '2 100', protein: '70', items: 15, priceRatio: 0.65, discountPct: 22 }
+                        { name: 'Микс-эконом', emoji: '💰', desc: 'Максимум еды за минимум денег на неделю', kcal: '2 000', protein: '65', items: 16, priceRatio: 0.63, discountPct: 18, recommended: true },
+                        { name: 'Простой набор', emoji: '🛒', desc: 'Всё необходимое без излишеств', kcal: '1 900', protein: '60', items: 15, priceRatio: 0.60, discountPct: 15 },
+                        { name: 'Антикризис', emoji: '🔥', desc: 'Акционные товары + базовые продукты', kcal: '2 100', protein: '70', items: 17, priceRatio: 0.65, discountPct: 22 }
                     ],
                     low: [
-                        { name: 'Классический микс', emoji: '🍽️', desc: 'Сбалансированно: и ПП, и обычное', kcal: '2 000', protein: '90', items: 19, priceRatio: 0.94, discountPct: 16, recommended: true },
-                        { name: 'Эконом-набор', emoji: '💸', desc: 'Максимум еды за минимум денег', kcal: '2 100', protein: '78', items: 22, priceRatio: 0.92, discountPct: 18 },
-                        { name: 'Премиум-вкус', emoji: '⭐', desc: 'Вкусно и разнообразно', kcal: '1 950', protein: '100', items: 18, priceRatio: 0.99, discountPct: 14 }
+                        { name: 'Классический микс', emoji: '🍽️', desc: 'Сбалансированно: и ПП, и обычное на 7 дней', kcal: '2 000', protein: '90', items: 22, priceRatio: 0.94, discountPct: 16, recommended: true },
+                        { name: 'Эконом-набор', emoji: '💸', desc: 'Максимум еды за минимум денег', kcal: '2 100', protein: '78', items: 24, priceRatio: 0.92, discountPct: 18 },
+                        { name: 'Премиум-вкус', emoji: '⭐', desc: 'Вкусно и разнообразно', kcal: '1 950', protein: '100', items: 20, priceRatio: 0.99, discountPct: 14 }
                     ],
                     medium: [
-                        { name: 'Золотая середина', emoji: '⚖️', desc: 'Идеальный баланс цены и качества', kcal: '2 100', protein: '95', items: 24, priceRatio: 0.93, discountPct: 17, recommended: true },
-                        { name: 'Всего понемногу', emoji: '🍽️', desc: 'Мясо, рыба, овощи, фрукты, крупы', kcal: '2 200', protein: '90', items: 26, priceRatio: 0.95, discountPct: 15 },
-                        { name: 'Умный выбор', emoji: '🧠', desc: 'Оптимизировано по КБЖУ и стоимости', kcal: '2 000', protein: '100', items: 22, priceRatio: 0.91, discountPct: 19 }
+                        { name: 'Золотая середина', emoji: '⚖️', desc: 'Идеальный баланс цены и качества', kcal: '2 100', protein: '95', items: 28, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Всего понемногу', emoji: '🍽️', desc: 'Мясо, рыба, овощи, фрукты, крупы', kcal: '2 200', protein: '90', items: 30, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Умный выбор', emoji: '🧠', desc: 'Оптимизировано по КБЖУ и стоимости', kcal: '2 000', protein: '100', items: 26, priceRatio: 0.91, discountPct: 19 }
                     ],
                     high: [
-                        { name: 'Разнообразный', emoji: '🌈', desc: 'Широкий ассортимент для любого настроения', kcal: '2 200', protein: '105', items: 28, priceRatio: 0.91, discountPct: 18, recommended: true },
-                        { name: 'Гурман-микс', emoji: '🧑‍🍳', desc: 'Интересные сочетания и новые вкусы', kcal: '2 100', protein: '100', items: 26, priceRatio: 0.93, discountPct: 16 },
-                        { name: 'Запас на неделю+', emoji: '📦', desc: 'С запасом — хватит даже на гостей', kcal: '2 300', protein: '95', items: 32, priceRatio: 0.95, discountPct: 21 }
+                        { name: 'Разнообразный', emoji: '🌈', desc: 'Широкий ассортимент для любого настроения', kcal: '2 200', protein: '105', items: 32, priceRatio: 0.91, discountPct: 18, recommended: true },
+                        { name: 'Гурман-микс', emoji: '🧑‍🍳', desc: 'Интересные сочетания и новые вкусы', kcal: '2 100', protein: '100', items: 30, priceRatio: 0.93, discountPct: 16 },
+                        { name: 'Запас на неделю+', emoji: '📦', desc: 'С запасом — хватит даже на гостей', kcal: '2 300', protein: '95', items: 36, priceRatio: 0.95, discountPct: 21 }
                     ],
                     premium: [
-                        { name: 'Всё лучшее', emoji: '💎', desc: 'Премиальные продукты на каждый день', kcal: '2 200', protein: '120', items: 30, priceRatio: 0.88, discountPct: 20, recommended: true },
-                        { name: 'Мишлен дома', emoji: '🌟', desc: 'Деликатесы для ресторанных блюд', kcal: '2 100', protein: '110', items: 28, priceRatio: 0.90, discountPct: 18 },
-                        { name: 'Максимум-плюс', emoji: '🚀', desc: 'Полная корзина без ограничений', kcal: '2 500', protein: '130', items: 36, priceRatio: 0.93, discountPct: 24 }
+                        { name: 'Всё лучшее', emoji: '💎', desc: 'Премиальные продукты на каждый день', kcal: '2 200', protein: '120', items: 34, priceRatio: 0.88, discountPct: 20, recommended: true },
+                        { name: 'Мишлен дома', emoji: '🌟', desc: 'Деликатесы для ресторанных блюд', kcal: '2 100', protein: '110', items: 32, priceRatio: 0.90, discountPct: 18 },
+                        { name: 'Максимум-плюс', emoji: '🚀', desc: 'Полная корзина без ограничений', kcal: '2 500', protein: '130', items: 40, priceRatio: 0.93, discountPct: 24 }
                     ]
                 }
             };
@@ -1743,13 +1731,13 @@
 
         function renderPlans() {
             const container = document.getElementById('plansContainer');
-            const budget = parseInt(input.value) || 1500;
+            const budget = parseInt(input.value) || 2000;
             const data = generatePlans(selectedDiet || 'any', budget);
             container.innerHTML = '';
             selectedPlan = null;
             document.getElementById('plansNext').disabled = true;
 
-            data.forEach((p, i) => {
+            data.forEach((p) => {
                 const div = document.createElement('div');
                 div.className = 'plan-card' + (p.recommended ? ' recommended' : '');
                 div.innerHTML = `
@@ -1767,7 +1755,7 @@
           <div class="plan-stat"><div class="v">Б ${p.protein}г</div><div class="l">/день</div></div>
         </div>
         <div class="plan-bottom">
-          <div class="plan-price">${p.price} ₽ <small>/ 5 дней</small></div>
+          <div class="plan-price">${p.price} ₽ <small>/ 7 дней</small></div>
           <span class="plan-saved">−${p.saved} ₽</span>
         </div>
       `;
@@ -1784,7 +1772,7 @@
         function updatePlansSub() {
             const dietLabels = { pp: 'ПП', normal: 'Обычное', sport: 'Спортивное', veg: 'Вегетарианское', any: 'Микс' };
             const dietLabel = dietLabels[selectedDiet] || '—';
-            document.getElementById('plansSub').textContent = `Бюджет ${input.value} ₽ · ${dietLabel} · 5 дней`;
+            document.getElementById('plansSub').textContent = `Бюджет ${input.value} ₽ · ${dietLabel} · 7 дней`;
         }
 
         // === ПРОДУКТОВАЯ БАЗА ===
@@ -1792,127 +1780,124 @@
             pp: {
                 breakfast: [
                     { emoji: '🥣', name: 'Овсяные хлопья «Геркулес» 500 г', kcal: '355 ккал/100г', tags: ['ПП'], qty: '×1 шт', basePr: 69, oldPr: 89, disc: '−22%' },
-                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
-                    { emoji: '🍌', name: 'Бананы, 1 кг', kcal: '89 ккал/100г', tags: [], qty: '×1 кг', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×2 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🍌', name: 'Бананы, 1 кг', kcal: '89 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 89, oldPr: 119, disc: '−25%' },
                     { emoji: '🫐', name: 'Черника замороженная 300 г', kcal: '57 ккал/100г', tags: ['ПП'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
-                    { emoji: '🥛', name: 'Кефир 1% 900 мл', kcal: '40 ккал/100г', tags: ['ПП'], qty: '×2 шт', basePr: 75, oldPr: 89, disc: '−16%' },
+                    { emoji: '🥛', name: 'Кефир 1% 900 мл', kcal: '40 ккал/100г', tags: ['ПП'], qty: '×3 шт', basePr: 75, oldPr: 89, disc: '−16%' },
                 ],
                 lunch: [
-                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1 кг', basePr: 269, oldPr: 329, disc: '−18%' },
+                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1,5 кг', basePr: 269, oldPr: 329, disc: '−18%' },
                     { emoji: '🍚', name: 'Рис круглозерный 900 г', kcal: '344 ккал/100г', tags: [], qty: '×1 уп', basePr: 79, oldPr: null, disc: null },
-                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 118, oldPr: 158, disc: '−25%' },
-                    { emoji: '🥬', name: 'Брокколи заморож. 400 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×1 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: ['ПП'], qty: '×3 уп', basePr: 118, oldPr: 158, disc: '−25%' },
+                    { emoji: '🥬', name: 'Брокколи заморож. 400 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 109, oldPr: 139, disc: '−22%' },
                     { emoji: '🫘', name: 'Чечевица красная 450 г', kcal: '310 ккал/100г', tags: ['Б 24г'], qty: '×1 уп', basePr: 99, oldPr: 129, disc: '−23%' },
                 ],
                 dinner: [
-                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×1 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
-                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
-                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
-                    { emoji: '🥑', name: 'Авокадо, 1 шт', kcal: '160 ккал/100г', tags: ['ПП'], qty: '×2 шт', basePr: 89, oldPr: 119, disc: '−25%' },
-                    { emoji: '🍅', name: 'Томаты черри 250 г', kcal: '18 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×2 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×1 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×5 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🥑', name: 'Авокадо, 1 шт', kcal: '160 ккал/100г', tags: ['ПП'], qty: '×3 шт', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🍅', name: 'Томаты черри 250 г', kcal: '18 ккал/100г', tags: ['ПП'], qty: '×3 уп', basePr: 109, oldPr: 139, disc: '−22%' },
                 ]
             },
             normal: {
                 breakfast: [
-                    { emoji: '🍞', name: 'Хлеб нарезной белый', kcal: '265 ккал/100г', tags: [], qty: '×2 шт', basePr: 39, oldPr: null, disc: null },
+                    { emoji: '🍞', name: 'Хлеб нарезной белый', kcal: '265 ккал/100г', tags: [], qty: '×3 шт', basePr: 39, oldPr: null, disc: null },
                     { emoji: '🧈', name: 'Масло сливочное 180 г', kcal: '748 ккал/100г', tags: [], qty: '×1 уп', basePr: 119, oldPr: 149, disc: '−20%' },
-                    { emoji: '🌭', name: 'Сосиски молочные 400 г', kcal: '266 ккал/100г', tags: [], qty: '×1 уп', basePr: 139, oldPr: 179, disc: '−22%' },
-                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: [], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
-                    { emoji: '🥞', name: 'Блины замороженные 420 г', kcal: '215 ккал/100г', tags: [], qty: '×1 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🌭', name: 'Сосиски молочные 400 г', kcal: '266 ккал/100г', tags: [], qty: '×2 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: [], qty: '×2 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🥞', name: 'Блины замороженные 420 г', kcal: '215 ккал/100г', tags: [], qty: '×2 уп', basePr: 109, oldPr: 139, disc: '−22%' },
                 ],
                 lunch: [
-                    { emoji: '🥟', name: 'Пельмени «Магнит» 900 г', kcal: '245 ккал/100г', tags: [], qty: '×1 уп', basePr: 189, oldPr: 249, disc: '−24%' },
-                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×2 уп', basePr: 55, oldPr: null, disc: null },
-                    { emoji: '🍗', name: 'Окорочка куриные 1 кг', kcal: '185 ккал/100г', tags: [], qty: '×1 кг', basePr: 169, oldPr: 219, disc: '−23%' },
-                    { emoji: '🥔', name: 'Картофель, 2 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 69, oldPr: null, disc: null },
-                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×2 бн', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🥟', name: 'Пельмени «Магнит» 900 г', kcal: '245 ккал/100г', tags: [], qty: '×2 уп', basePr: 189, oldPr: 249, disc: '−24%' },
+                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×3 уп', basePr: 55, oldPr: null, disc: null },
+                    { emoji: '🍗', name: 'Окорочка куриные 1 кг', kcal: '185 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 169, oldPr: 219, disc: '−23%' },
+                    { emoji: '🥔', name: 'Картофель, 3 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 99, oldPr: null, disc: null },
+                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×3 бн', basePr: 159, oldPr: 199, disc: '−20%' },
                 ],
                 dinner: [
-                    { emoji: '🥩', name: 'Котлеты «Домашние» 400 г', kcal: '230 ккал/100г', tags: [], qty: '×1 уп', basePr: 179, oldPr: 229, disc: '−22%' },
-                    { emoji: '🍜', name: 'Лапша быстрого приг. ×5', kcal: '400 ккал/100г', tags: [], qty: '×1 уп', basePr: 89, oldPr: null, disc: null },
-                    { emoji: '🧀', name: 'Сыр «Российский» 200 г', kcal: '364 ккал/100г', tags: [], qty: '×1 уп', basePr: 149, oldPr: 189, disc: '−21%' },
-                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
-                    { emoji: '🍰', name: 'Пирожное «Картошка» 2 шт', kcal: '330 ккал/100г', tags: [], qty: '×1 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🥩', name: 'Котлеты «Домашние» 400 г', kcal: '230 ккал/100г', tags: [], qty: '×2 уп', basePr: 179, oldPr: 229, disc: '−22%' },
+                    { emoji: '🍜', name: 'Лапша быстрого приг. ×5', kcal: '400 ккал/100г', tags: [], qty: '×2 уп', basePr: 89, oldPr: null, disc: null },
+                    { emoji: '🧀', name: 'Сыр «Российский» 200 г', kcal: '364 ккал/100г', tags: [], qty: '×2 уп', basePr: 149, oldPr: 189, disc: '−21%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×1 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🍰', name: 'Пирожное «Картошка» 2 шт', kcal: '330 ккал/100г', tags: [], qty: '×2 уп', basePr: 79, oldPr: 99, disc: '−20%' },
                 ]
             },
             sport: {
                 breakfast: [
-                    { emoji: '🥚', name: 'Яйца куриные С0, 10 шт', kcal: '157 ккал/100г', tags: ['Б 13г', 'sport'], qty: '×2 уп', basePr: 129, oldPr: 159, disc: '−19%' },
-                    { emoji: '🥣', name: 'Овсянка цельнозерновая 500 г', kcal: '352 ккал/100г', tags: ['sport'], qty: '×1 уп', basePr: 79, oldPr: null, disc: null },
-                    { emoji: '🍌', name: 'Бананы, 1,5 кг', kcal: '89 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 129, oldPr: 169, disc: '−24%' },
+                    { emoji: '🥚', name: 'Яйца куриные С0, 10 шт', kcal: '157 ккал/100г', tags: ['Б 13г', 'sport'], qty: '×3 уп', basePr: 129, oldPr: 159, disc: '−19%' },
+                    { emoji: '🥣', name: 'Овсянка цельнозерновая 500 г', kcal: '352 ккал/100г', tags: ['sport'], qty: '×2 уп', basePr: 79, oldPr: null, disc: null },
+                    { emoji: '🍌', name: 'Бананы, 2 кг', kcal: '89 ккал/100г', tags: [], qty: '×2 кг', basePr: 129, oldPr: 169, disc: '−24%' },
                     { emoji: '🥜', name: 'Арахисовая паста 250 г', kcal: '590 ккал/100г', tags: ['Б 25г'], qty: '×1 бн', basePr: 179, oldPr: 229, disc: '−22%' },
-                    { emoji: '🥛', name: 'Молоко 2,5% 1 л', kcal: '54 ккал/100г', tags: ['Б 3г'], qty: '×3 уп', basePr: 75, oldPr: 89, disc: '−16%' },
+                    { emoji: '🥛', name: 'Молоко 2,5% 1 л', kcal: '54 ккал/100г', tags: ['Б 3г'], qty: '×4 уп', basePr: 75, oldPr: 89, disc: '−16%' },
                 ],
                 lunch: [
-                    { emoji: '🍗', name: 'Грудка куриная охл. 1 кг', kcal: '113 ккал/100г', tags: ['Б 24г', 'sport'], qty: '×1,5 кг', basePr: 389, oldPr: 469, disc: '−17%' },
-                    { emoji: '🍚', name: 'Гречка ядрица 900 г', kcal: '313 ккал/100г', tags: ['sport'], qty: '×2 уп', basePr: 89, oldPr: null, disc: null },
-                    { emoji: '🥦', name: 'Брокколи свежая, 500 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 129, oldPr: 169, disc: '−24%' },
-                    { emoji: '🦃', name: 'Индейка филе охл. 600 г', kcal: '104 ккал/100г', tags: ['Б 22г'], qty: '×1 уп', basePr: 319, oldPr: 399, disc: '−20%' },
-                    { emoji: '🫘', name: 'Фасоль консерв. 400 г', kcal: '99 ккал/100г', tags: ['Б 7г'], qty: '×2 бн', basePr: 69, oldPr: 89, disc: '−22%' },
+                    { emoji: '🍗', name: 'Грудка куриная охл. 1 кг', kcal: '113 ккал/100г', tags: ['Б 24г', 'sport'], qty: '×2 кг', basePr: 389, oldPr: 469, disc: '−17%' },
+                    { emoji: '🍚', name: 'Гречка ядрица 900 г', kcal: '313 ккал/100г', tags: ['sport'], qty: '×3 уп', basePr: 89, oldPr: null, disc: null },
+                    { emoji: '🥦', name: 'Брокколи свежая, 500 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×3 уп', basePr: 129, oldPr: 169, disc: '−24%' },
+                    { emoji: '🦃', name: 'Индейка филе охл. 600 г', kcal: '104 ккал/100г', tags: ['Б 22г'], qty: '×2 уп', basePr: 319, oldPr: 399, disc: '−20%' },
+                    { emoji: '🫘', name: 'Фасоль консерв. 400 г', kcal: '99 ккал/100г', tags: ['Б 7г'], qty: '×3 бн', basePr: 69, oldPr: 89, disc: '−22%' },
                 ],
                 dinner: [
-                    { emoji: '🥛', name: 'Творог 2%, 300 г', kcal: '103 ккал/100г', tags: ['Б 18г', 'sport'], qty: '×4 уп', basePr: 99, oldPr: 129, disc: '−23%' },
-                    { emoji: '🐟', name: 'Тунец консерв. 185 г', kcal: '96 ккал/100г', tags: ['Б 21г'], qty: '×3 бн', basePr: 119, oldPr: 149, disc: '−20%' },
-                    { emoji: '🥗', name: 'Салат микс 150 г', kcal: '20 ккал/100г', tags: ['ПП'], qty: '×3 уп', basePr: 89, oldPr: 109, disc: '−18%' },
+                    { emoji: '🥛', name: 'Творог 2%, 300 г', kcal: '103 ккал/100г', tags: ['Б 18г', 'sport'], qty: '×5 уп', basePr: 99, oldPr: 129, disc: '−23%' },
+                    { emoji: '🐟', name: 'Тунец консерв. 185 г', kcal: '96 ккал/100г', tags: ['Б 21г'], qty: '×4 бн', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🥗', name: 'Салат микс 150 г', kcal: '20 ккал/100г', tags: ['ПП'], qty: '×4 уп', basePr: 89, oldPr: 109, disc: '−18%' },
                     { emoji: '🥜', name: 'Миндаль 200 г', kcal: '575 ккал/100г', tags: ['Б 21г'], qty: '×1 уп', basePr: 199, oldPr: 259, disc: '−23%' },
-                    { emoji: '🍠', name: 'Батат (сладкий картофель) 500 г', kcal: '86 ккал/100г', tags: ['sport'], qty: '×1 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                    { emoji: '🍠', name: 'Батат (сладкий картофель) 500 г', kcal: '86 ккал/100г', tags: ['sport'], qty: '×2 уп', basePr: 139, oldPr: 179, disc: '−22%' },
                 ]
             },
             veg: {
                 breakfast: [
-                    { emoji: '🥣', name: 'Гранола с орехами 300 г', kcal: '420 ккал/100г', tags: ['veg'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
-                    { emoji: '🥛', name: 'Молоко овсяное 1 л', kcal: '48 ккал/100г', tags: ['veg'], qty: '×2 уп', basePr: 119, oldPr: 149, disc: '−20%' },
-                    { emoji: '🍎', name: 'Яблоки Гала, 1 кг', kcal: '52 ккал/100г', tags: [], qty: '×1 кг', basePr: 99, oldPr: 129, disc: '−23%' },
-                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🥣', name: 'Гранола с орехами 300 г', kcal: '420 ккал/100г', tags: ['veg'], qty: '×2 уп', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🥛', name: 'Молоко овсяное 1 л', kcal: '48 ккал/100г', tags: ['veg'], qty: '×3 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🍎', name: 'Яблоки Гала, 1 кг', kcal: '52 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 99, oldPr: 129, disc: '−23%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×2 уп', basePr: 99, oldPr: null, disc: 'M+' },
                     { emoji: '🍯', name: 'Мёд натуральный 350 г', kcal: '304 ккал/100г', tags: ['veg'], qty: '×1 бн', basePr: 199, oldPr: 259, disc: '−23%' },
                 ],
                 lunch: [
-                    { emoji: '🫘', name: 'Нут 450 г', kcal: '364 ккал/100г', tags: ['Б 19г', 'veg'], qty: '×1 уп', basePr: 89, oldPr: 119, disc: '−25%' },
-                    { emoji: '🍚', name: 'Булгур 500 г', kcal: '342 ккал/100г', tags: ['veg'], qty: '×1 уп', basePr: 85, oldPr: null, disc: null },
-                    { emoji: '🫑', name: 'Перец болгарский, 500 г', kcal: '27 ккал/100г', tags: ['veg'], qty: '×0,5 кг', basePr: 109, oldPr: 139, disc: '−22%' },
-                    { emoji: '🧀', name: 'Сыр Адыгейский 300 г', kcal: '264 ккал/100г', tags: ['Б 18г'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
-                    { emoji: '🍆', name: 'Баклажаны, 500 г', kcal: '25 ккал/100г', tags: ['veg'], qty: '×0,5 кг', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🫘', name: 'Нут 450 г', kcal: '364 ккал/100г', tags: ['Б 19г', 'veg'], qty: '×2 уп', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🍚', name: 'Булгур 500 г', kcal: '342 ккал/100г', tags: ['veg'], qty: '×2 уп', basePr: 85, oldPr: null, disc: null },
+                    { emoji: '🫑', name: 'Перец болгарский, 500 г', kcal: '27 ккал/100г', tags: ['veg'], qty: '×1 кг', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🧀', name: 'Сыр Адыгейский 300 г', kcal: '264 ккал/100г', tags: ['Б 18г'], qty: '×2 уп', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🍆', name: 'Баклажаны, 500 г', kcal: '25 ккал/100г', tags: ['veg'], qty: '×1 кг', basePr: 79, oldPr: 99, disc: '−20%' },
                 ],
                 dinner: [
-                    { emoji: '🥗', name: 'Тофу 300 г', kcal: '76 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×2 уп', basePr: 139, oldPr: 179, disc: '−22%' },
-                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
-                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
-                    { emoji: '🥕', name: 'Морковь свежая, 1 кг', kcal: '41 ккал/100г', tags: ['veg'], qty: '×1 кг', basePr: 35, oldPr: null, disc: null },
-                    { emoji: '🫒', name: 'Хумус 200 г', kcal: '166 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×2 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🥗', name: 'Тофу 300 г', kcal: '76 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×3 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×1 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×5 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🥕', name: 'Морковь свежая, 1 кг', kcal: '41 ккал/100г', tags: ['veg'], qty: '×1,5 кг', basePr: 35, oldPr: null, disc: null },
+                    { emoji: '🫒', name: 'Хумус 200 г', kcal: '166 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×3 уп', basePr: 119, oldPr: 149, disc: '−20%' },
                 ]
             },
             any: {
                 breakfast: [
                     { emoji: '🥣', name: 'Овсяные хлопья «Геркулес» 500 г', kcal: '355 ккал/100г', tags: [], qty: '×1 шт', basePr: 69, oldPr: 89, disc: '−22%' },
-                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
-                    { emoji: '🍌', name: 'Бананы, 1 кг', kcal: '89 ккал/100г', tags: [], qty: '×1 кг', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×2 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🍌', name: 'Бананы, 1,5 кг', kcal: '89 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 89, oldPr: 119, disc: '−25%' },
                     { emoji: '🧈', name: 'Масло сливочное 180 г', kcal: '748 ккал/100г', tags: [], qty: '×1 уп', basePr: 119, oldPr: 149, disc: '−20%' },
-                    { emoji: '🍞', name: 'Хлеб нарезной', kcal: '265 ккал/100г', tags: [], qty: '×1 шт', basePr: 39, oldPr: null, disc: null },
+                    { emoji: '🍞', name: 'Хлеб нарезной', kcal: '265 ккал/100г', tags: [], qty: '×2 шт', basePr: 39, oldPr: null, disc: null },
                 ],
                 lunch: [
-                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1 кг', basePr: 269, oldPr: 329, disc: '−18%' },
-                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×1 уп', basePr: 55, oldPr: null, disc: null },
-                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: [], qty: '×2 уп', basePr: 118, oldPr: 158, disc: '−25%' },
-                    { emoji: '🥔', name: 'Картофель, 2 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 69, oldPr: null, disc: null },
-                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×1 бн', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1,5 кг', basePr: 269, oldPr: 329, disc: '−18%' },
+                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×2 уп', basePr: 55, oldPr: null, disc: null },
+                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: [], qty: '×3 уп', basePr: 118, oldPr: 158, disc: '−25%' },
+                    { emoji: '🥔', name: 'Картофель, 3 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 99, oldPr: null, disc: null },
+                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×2 бн', basePr: 159, oldPr: 199, disc: '−20%' },
                 ],
                 dinner: [
-                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×1 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
-                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
-                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×2 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×1 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×5 уп', basePr: 79, oldPr: 99, disc: '−20%' },
                     { emoji: '🧀', name: 'Сыр «Российский» 200 г', kcal: '364 ккал/100г', tags: [], qty: '×1 уп', basePr: 149, oldPr: 189, disc: '−21%' },
-                    { emoji: '🍅', name: 'Томаты свежие, 500 г', kcal: '20 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🍅', name: 'Томаты свежие, 500 г', kcal: '20 ккал/100г', tags: [], qty: '×1 кг', basePr: 79, oldPr: 99, disc: '−20%' },
                 ]
             }
         };
 
-        // === Выбор продуктов в зависимости от бюджета ===
         function selectProducts(diet, budget) {
             const tier = getBudgetTier(budget);
             const db = productDB[diet] || productDB.any;
-            const ratio = budget / 1500;
 
-            // Количество продуктов на приём зависит от бюджета
             const countMap = {
                 ultra_low: { b: 2, l: 2, d: 2 },
                 low: { b: 3, l: 3, d: 3 },
@@ -1923,16 +1908,13 @@
             const counts = countMap[tier];
 
             function pick(arr, n) {
-                // Для дешёвых бюджетов берём самые дешёвые товары
                 const sorted = [...arr].sort((a, b) => a.basePr - b.basePr);
                 if (tier === 'ultra_low') return sorted.slice(0, n);
-                if (tier === 'premium') return sorted.slice(-n); // самые дорогие
-                // Для средних — микс
+                if (tier === 'premium') return sorted.slice(-n);
                 return arr.slice(0, n);
             }
 
             function adjustPrice(product) {
-                // Масштабируем цены под бюджет (премиум — дороже, эконом — дешевле)
                 const mult = tier === 'ultra_low' ? 0.85 :
                     tier === 'low' ? 1.0 :
                         tier === 'medium' ? 1.1 :
@@ -1950,7 +1932,6 @@
             };
         }
 
-        // === РЕНДЕР РЕКОМЕНДАЦИЙ ===
         function goToRecom() {
             renderRecom();
             goTo('screen-recom');
@@ -1958,7 +1939,7 @@
 
         function renderRecom() {
             const diet = selectedDiet || 'any';
-            const budget = parseInt(input.value) || 1500;
+            const budget = parseInt(input.value) || 2000;
             const plan = selectedPlan;
             if (!plan) return;
 
@@ -1969,21 +1950,19 @@
             const saved = totalOld - totalPrice;
             const itemCount = allProducts.length;
 
-            // Обновить заголовки
-            document.getElementById('recomTitle').textContent = plan.name + ' на 5 дней';
+            document.getElementById('recomTitle').textContent = plan.name + ' на 7 дней';
             document.getElementById('recomCount').textContent = `ВАША КОРЗИНА · ${itemCount} ПОЗИЦИЙ`;
 
             const mealLabels = {
-                breakfast: '🥚 Завтраки (5 дней)',
-                lunch: '🍲 Обеды (5 дней)',
-                dinner: '🌙 Ужины (5 дней)'
+                breakfast: '🥚 Завтраки (7 дней)',
+                lunch: '🍲 Обеды (7 дней)',
+                dinner: '🌙 Ужины (7 дней)'
             };
 
             const tagClassMap = { 'ПП': 'pp', 'veg': 'veg', 'sport': 'sport' };
 
             let html = '';
 
-            // Саммари
             html += `
       <div class="recom-summary">
         <div class="left">
@@ -1996,7 +1975,6 @@
       </div>
     `;
 
-            // Нутриенты
             html += `
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px">
         <div style="background:#fff3c4;border-radius:10px;padding:8px;text-align:center">
@@ -2008,13 +1986,12 @@
           <div style="font-size:10px;color:#2a8c3a">белок/день</div>
         </div>
         <div style="background:#e3f2fd;border-radius:10px;padding:8px;text-align:center">
-          <div style="font-weight:800;font-size:14px;color:#1565c0">5 дней</div>
-          <div style="font-size:10px;color:#1565c0">${itemCount * 5} приёмов</div>
+          <div style="font-weight:800;font-size:14px;color:#1565c0">7 дней</div>
+          <div style="font-size:10px;color:#1565c0">21 приём</div>
         </div>
       </div>
     `;
 
-            // Продукты по группам
             for (const meal of ['breakfast', 'lunch', 'dinner']) {
                 html += `<div class="recom-day">${mealLabels[meal]}</div>`;
                 for (const p of products[meal]) {
@@ -2046,13 +2023,12 @@
                 }
             }
 
-            // Подсказки в зависимости от диеты
             const tips = {
-                pp: '🥗 Все продукты подобраны с минимумом сахара и максимумом белка',
-                normal: '🍕 Классические продукты, которые вы любите — по выгодным ценам',
-                sport: '💪 Высокобелковый рацион для поддержки тренировок и восстановления',
-                veg: '🌱 Растительный белок и все необходимые нутриенты без мяса',
-                any: '✨ Сбалансированный набор — и полезно, и вкусно'
+                pp: '🥗 Все продукты подобраны с минимумом сахара и максимумом белка на всю неделю',
+                normal: '🍕 Классические продукты, которые вы любите — по выгодным ценам на 7 дней',
+                sport: '💪 Высокобелковый рацион на неделю для поддержки тренировок и восстановления',
+                veg: '🌱 Растительный белок и все необходимые нутриенты без мяса на 7 дней',
+                any: '✨ Сбалансированный набор на неделю — и полезно, и вкусно'
             };
 
             html += `
@@ -2065,11 +2041,9 @@
             document.getElementById('recomBody').innerHTML = html;
             document.getElementById('recomBtn').textContent = `Оформить · ${totalPrice} ₽`;
 
-            // Сохраняем данные для результата
             window._orderData = { totalPrice, totalOld, saved, itemCount, plan, diet };
         }
 
-        // === РЕНДЕР РЕЗУЛЬТАТА ===
         function renderResult() {
             const d = window._orderData;
             if (!d) return;
@@ -2080,7 +2054,6 @@
             const pickupTime = pickupTimes[Math.floor(Math.random() * pickupTimes.length)];
             const addresses = ['ул. Ленина 12', 'пр. Мира 45', 'ул. Гагарина 8', 'ул. Пушкина 23'];
             const address = addresses[Math.floor(Math.random() * addresses.length)];
-
             const assemblyTime = Math.max(25, Math.round(d.itemCount * 3.2));
 
             document.getElementById('resultContent').innerHTML = `
@@ -2105,7 +2078,7 @@
         <div class="result-info-icon">📦</div>
         <div class="result-info-text">
           <div class="t">Товаров в заказе</div>
-          <div class="v">${d.itemCount} позиций · на 5 дней</div>
+          <div class="v">${d.itemCount} позиций · на 7 дней</div>
         </div>
       </div>
       <div class="result-info-card">
@@ -2119,7 +2092,7 @@
         <div class="result-info-icon">⏱️</div>
         <div class="result-info-text">
           <div class="t">Время на сборку корзины</div>
-          <div class="v">${assemblyTime} секунд · вместо ~30 минут</div>
+          <div class="v">${assemblyTime} секунд · вместо ~40 минут</div>
         </div>
       </div>
 
@@ -2134,7 +2107,6 @@
     `;
         }
 
-        // Перехватываем переход на результат
         const origGoTo = goTo;
         goTo = function (id) {
             if (id === 'screen-result') renderResult();
@@ -2148,10 +2120,9 @@
             document.querySelectorAll('.diet-card').forEach(c => c.classList.remove('selected'));
             document.getElementById('dietNext').disabled = true;
             document.getElementById('plansNext').disabled = true;
-            updateBudget(1500);
+            updateBudget(2000);
         }
 
-        // === ТОСТ ===
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
