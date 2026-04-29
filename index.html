@@ -1,1300 +1,2164 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Магнит Планер — прототип</title>
-
-  <style>
-    :root {
-      --red: #e30613;
-      --red-dark: #c9000b;
-      --red-soft: #ff3b45;
-      --pink: #ff5f7a;
-      --white: #ffffff;
-      --gray-bg: #f4f4f6;
-      --gray-light: #f0f0f2;
-      --gray: #8b8b95;
-      --text: #1f1f24;
-      --muted: #6f6f78;
-      --shadow: 0 16px 40px rgba(25, 25, 30, 0.12);
-      --card-shadow: 0 8px 22px rgba(25, 25, 30, 0.08);
-      --radius-lg: 28px;
-      --radius-md: 20px;
-      --radius-sm: 14px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(227, 6, 19, 0.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(255, 95, 122, 0.18), transparent 28%),
-        var(--gray-bg);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 22px;
-    }
-
-    .phone {
-      width: 100%;
-      max-width: 420px;
-      height: 820px;
-      max-height: calc(100vh - 44px);
-      background: var(--white);
-      border-radius: 36px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .screen {
-      display: none;
-      height: 100%;
-      overflow-y: auto;
-      background: linear-gradient(180deg, #fff 0%, #fff 62%, #fafafa 100%);
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .screen::-webkit-scrollbar {
-      width: 0;
-    }
-
-    .hero {
-      position: relative;
-      padding: 24px 22px 28px;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.34), transparent 28%),
-        linear-gradient(135deg, var(--red) 0%, var(--red-soft) 58%, #ff7a43 100%);
-      color: var(--white);
-      border-bottom-left-radius: 32px;
-      border-bottom-right-radius: 32px;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 170px;
-      height: 170px;
-      right: -62px;
-      top: -48px;
-      background: rgba(255, 255, 255, 0.17);
-      border-radius: 50%;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 110px;
-      height: 110px;
-      left: -36px;
-      bottom: -42px;
-      background: rgba(255, 255, 255, 0.13);
-      border-radius: 50%;
-    }
-
-    .topbar {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 26px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      font-size: 18px;
-    }
-
-    .logo {
-      width: 32px;
-      height: 32px;
-      background: var(--white);
-      color: var(--red);
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      font-size: 19px;
-      line-height: 1;
-    }
-
-    .step {
-      font-size: 13px;
-      font-weight: 700;
-      padding: 8px 11px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 30px;
-      line-height: 1.05;
-      letter-spacing: -0.055em;
-      max-width: 330px;
-    }
-
-    .subtitle {
-      margin: 12px 0 0;
-      font-size: 15px;
-      line-height: 1.45;
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 310px;
-    }
-
-    .progress {
-      position: relative;
-      z-index: 2;
-      margin-top: 22px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.24);
-      overflow: hidden;
-    }
-
-    .progress span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--white);
-    }
-
-    .content {
-      position: relative;
-      padding: 22px;
-    }
-
-    .soft-bg-icon {
-      position: absolute;
-      right: 18px;
-      top: 8px;
-      font-size: 86px;
-      opacity: 0.055;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .options {
-      display: grid;
-      gap: 12px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .option {
-      border: 0;
-      width: 100%;
-      text-align: left;
-      background: var(--white);
-      border-radius: var(--radius-md);
-      padding: 17px 16px;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: 0.18s ease;
-      color: var(--text);
-      font-family: inherit;
-    }
-
-    .option:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 25px rgba(25, 25, 30, 0.11);
-    }
-
-    .option.selected {
-      background: linear-gradient(135deg, var(--red) 0%, var(--red-soft) 100%);
-      color: var(--white);
-    }
-
-    .option-main {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .option-icon {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
-      border-radius: 15px;
-      background: #fff1f2;
-      color: var(--red);
-      display: grid;
-      place-items: center;
-      font-size: 21px;
-    }
-
-    .option.selected .option-icon {
-      background: rgba(255, 255, 255, 0.18);
-      color: var(--white);
-    }
-
-    .option-title {
-      font-size: 16px;
-      font-weight: 760;
-      letter-spacing: -0.02em;
-    }
-
-    .option-desc {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 3px;
-      line-height: 1.3;
-    }
-
-    .option.selected .option-desc {
-      color: rgba(255, 255, 255, 0.78);
-    }
-
-    .check {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #e2e2e6;
-      display: grid;
-      place-items: center;
-      flex: 0 0 22px;
-      font-size: 12px;
-      color: transparent;
-    }
-
-    .option.selected .check {
-      border-color: rgba(255, 255, 255, 0.85);
-      background: var(--white);
-      color: var(--red);
-    }
-
-    .chip-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .chip {
-      border: 0;
-      background: var(--white);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 13px 15px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 740;
-      box-shadow: var(--card-shadow);
-      cursor: pointer;
-      transition: 0.18s ease;
-    }
-
-    .chip.selected {
-      background: var(--red);
-      color: var(--white);
-    }
-
-    .note {
-      margin-top: 16px;
-      padding: 14px 15px;
-      border-radius: var(--radius-sm);
-      background: #fff6f6;
-      color: #5d2226;
-      font-size: 13px;
-      line-height: 1.35;
-      position: relative;
-      z-index: 2;
-    }
-
-    .input-card {
-      position: relative;
-      z-index: 2;
-      background: var(--white);
-      border-radius: 24px;
-      box-shadow: var(--card-shadow);
-      padding: 18px 16px;
-      border: 1px solid rgba(20, 20, 25, 0.05);
-    }
-
-    .field-label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 14px;
-      font-weight: 760;
-      color: var(--text);
-    }
-
-    .plan-input {
-      width: 100%;
-      border: 1.5px solid #e5e5eb;
-      border-radius: 18px;
-      padding: 15px 16px;
-      font-family: inherit;
-      font-size: 16px;
-      color: var(--text);
-      background: #fcfcfd;
-      outline: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .plan-input:focus {
-      border-color: rgba(227, 6, 19, 0.7);
-      box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
-      background: var(--white);
-    }
-
-    .field-hint {
-      margin: 10px 0 0;
-      font-size: 12px;
-      line-height: 1.4;
-      color: var(--muted);
-    }
-
-    .bottom {
-      padding: 18px 22px 22px;
-      margin-top: auto;
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 10px;
-      position: sticky;
-      bottom: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.7), #fff 28%);
-      z-index: 5;
-    }
-
-    .bottom.single {
-      grid-template-columns: 1fr;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 18px;
-      padding: 16px 17px;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 54px;
-      transition: 0.18s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: var(--red);
-      color: var(--white);
-      box-shadow: 0 10px 22px rgba(227, 6, 19, 0.22);
-    }
-
-    .btn-primary:hover {
-      background: var(--red-dark);
-    }
-
-    .btn-secondary {
-      background: var(--gray-light);
-      color: var(--text);
-    }
-
-    .small-caption {
-      margin-top: 12px;
-      color: var(--gray);
-      font-size: 12px;
-      line-height: 1.35;
-      text-align: center;
-    }
-
-    /* Result page */
-
-    .result-hero {
-      padding-bottom: 24px;
-    }
-
-    .result-content {
-      padding: 18px 16px 22px;
-    }
-
-    .recipe-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .recipe-card {
-      position: relative;
-      background: var(--white);
-      border-radius: 24px;
-      box-shadow: var(--card-shadow);
-      padding: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(20,20,25,0.04);
-    }
-
-    .recipe-card.best {
-      border: 1.5px solid rgba(227, 6, 19, 0.28);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #fff0f1;
-      color: var(--red);
-      font-size: 12px;
-      font-weight: 850;
-      margin-bottom: 10px;
-    }
-
-    .recipe-top {
-      display: grid;
-      grid-template-columns: 1fr 86px;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .recipe-title {
-      margin: 0;
-      font-size: 18px;
-      line-height: 1.12;
-      letter-spacing: -0.035em;
-    }
-
-    .food-photo {
-      width: 86px;
-      height: 86px;
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
-        linear-gradient(135deg, #ffe1c5, #ffb36d);
-      display: grid;
-      place-items: center;
-      font-size: 39px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.42);
-    }
-
-    .food-photo.green {
-      background:
-        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
-        linear-gradient(135deg, #e5ffe4, #8ddf85);
-    }
-
-    .food-photo.yellow {
-      background:
-        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.82), transparent 28%),
-        linear-gradient(135deg, #fff0b8, #ffcc4d);
-    }
-
-    .meta {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 11px;
-    }
-
-    .meta span {
-      padding: 7px 9px;
-      border-radius: 999px;
-      background: #f4f4f6;
-      font-size: 12px;
-      font-weight: 780;
-      color: #43434a;
-    }
-
-    .kbju {
-      margin: 12px 0 0;
-      font-size: 13px;
-      font-weight: 760;
-      color: #323238;
-      line-height: 1.35;
-    }
-
-    .ingredients {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.35;
-    }
-
-    .recipe-actions {
-      margin-top: 13px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .choose-btn {
-      border: 0;
-      background: var(--red);
-      color: var(--white);
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 850;
-      cursor: pointer;
-      flex: 1;
-    }
-
-    .mini-link {
-      border: 0;
-      background: #f2f2f4;
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px 13px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .result-bottom {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      padding: 16px 16px 22px;
-    }
-
-    .result-bottom.single {
-      grid-template-columns: 1fr;
-    }
-
-    .suggestion-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .suggestion-card {
-      background: var(--white);
-      border-radius: 22px;
-      box-shadow: var(--card-shadow);
-      padding: 14px;
-      border: 1px solid rgba(20, 20, 25, 0.05);
-    }
-
-    .suggestion-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .suggestion-title {
-      margin: 0;
-      font-size: 16px;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-
-    .suggestion-price {
-      flex: 0 0 auto;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #fff0f1;
-      color: var(--red);
-      font-size: 12px;
-      font-weight: 850;
-    }
-
-    .suggestion-desc {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .suggestion-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .suggestion-meta span {
-      padding: 7px 9px;
-      border-radius: 999px;
-      background: #f4f4f6;
-      font-size: 12px;
-      font-weight: 780;
-      color: #43434a;
-    }
-
-    .more-tile {
-      margin-top: 14px;
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #fff4f4 0%, #fff0f1 100%);
-      color: #7b2229;
-      font-size: 14px;
-      font-weight: 760;
-      text-align: center;
-      box-shadow: inset 0 0 0 1px rgba(227, 6, 19, 0.08);
-    }
-
-    @media (max-height: 760px) {
-      .phone {
-        height: calc(100vh - 20px);
-        max-height: none;
-      }
-
-      body {
-        padding: 10px;
-      }
-
-      .hero {
-        padding-top: 20px;
-      }
-
-      h1 {
-        font-size: 27px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      body {
-        padding: 0;
-        background: var(--white);
-      }
-
-      .phone {
-        max-width: none;
-        width: 100%;
-        height: 100vh;
-        max-height: none;
-        border-radius: 0;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магнит Планер — Интерактивный макет</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #e9e9e9;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            min-height: 100vh;
+        }
+
+        .phone {
+            width: 390px;
+            background: #fff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            min-height: 844px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* === ГЛАВНЫЙ ЭКРАН === */
+        .top-section {
+            background: linear-gradient(180deg, #ff8a3d 0%, #ff5a7a 55%, #ff3d6e 100%);
+            padding: 44px 14px 16px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 0 4px 8px;
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-bar {
+            flex: 1;
+            background: #fff;
+            border-radius: 22px;
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .magnit-plus {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .magnit-plus .m-logo {
+            background: #fff;
+            color: #ff3d6e;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .cards-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .card .label {
+            color: #777;
+            font-size: 11px;
+        }
+
+        .card .value {
+            font-weight: 700;
+            font-size: 15px;
+            margin: 1px 0 6px;
+        }
+
+        .cashback-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .btn-red {
+            background: linear-gradient(180deg, #ff5a7a, #ff3d6e);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            padding: 7px;
+            font-weight: 700;
+            margin-top: 4px;
+            font-size: 13px;
+        }
+
+        .qr-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-card .qr {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 6px;
+            background:
+                linear-gradient(45deg, #000 25%, transparent 25%) 0 0/10px 10px,
+                linear-gradient(-45deg, #000 25%, transparent 25%) 0 0/10px 10px,
+                #fff;
+            background-blend-mode: difference;
+        }
+
+        .ration-btn {
+            margin: 12px 14px 0;
+            width: calc(100% - 28px);
+            background: linear-gradient(135deg, #ff1744 0%, #e60023 55%, #b8001a 100%);
+            border-radius: 22px;
+            padding: 18px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 24px rgba(230, 0, 35, 0.4);
+            position: relative;
+            overflow: hidden;
+            min-height: 150px;
+            transition: transform 0.15s;
+        }
+
+        .ration-btn:active {
+            transform: scale(0.97);
+        }
+
+        .ration-btn::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .ration-badge {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: #ffd400;
+            color: #b8001a;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        .ration-illustration {
+            flex-shrink: 0;
+            width: 110px;
+            height: 110px;
+            background: #fff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+            position: relative;
+            z-index: 1;
+        }
+
+        .ration-illustration .emoji-stack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ration-illustration .emoji-stack span {
+            position: absolute;
+            font-size: 38px;
+        }
+
+        .ration-illustration .e1 {
+            top: 6px;
+            left: 8px;
+        }
+
+        .ration-illustration .e2 {
+            top: 8px;
+            right: 6px;
+            font-size: 32px;
+        }
+
+        .ration-illustration .e3 {
+            bottom: 4px;
+            left: 14px;
+            font-size: 34px;
+        }
+
+        .ration-illustration .e4 {
+            bottom: 8px;
+            right: 8px;
+            font-size: 30px;
+        }
+
+        .ration-text {
+            flex: 1;
+            color: #fff;
+            text-align: left;
+            line-height: 1.15;
+            z-index: 1;
+            position: relative;
+        }
+
+        .ration-text .small {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: rgba(255, 255, 255, 0.18);
+            padding: 3px 10px;
+            border-radius: 10px;
+            width: fit-content;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .ration-text .big {
+            font-size: 20px;
+            font-weight: 800;
+            display: block;
+            line-height: 1.1;
+        }
+
+        .ration-text .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            background: #fff;
+            color: #e60023;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 7px 14px;
+            border-radius: 20px;
+        }
+
+        .banner {
+            margin: 10px 14px 0;
+            border-radius: 18px;
+            overflow: hidden;
+            height: 110px;
+            position: relative;
+            color: #fff;
+            background: linear-gradient(90deg, #2a8c3a 0%, #4cb359 50%, rgba(76, 179, 89, 0.4) 100%);
+            padding: 14px;
+        }
+
+        .banner h3 {
+            font-size: 19px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .banner .pill {
+            display: inline-block;
+            background: #fff;
+            color: #e60023;
+            padding: 4px 11px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .banner .ad-tag {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            color: #fff;
+            font-size: 10px;
+            opacity: 0.85;
+        }
+
+        .banner .grill-img {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 170px;
+            height: 100%;
+        }
+
+        .banner .plate {
+            width: 110px;
+            height: 80px;
+            background: radial-gradient(ellipse, #f4d142 30%, #d97f1c 70%);
+            border-radius: 50%;
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            box-shadow: inset -8px -10px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner .meat1,
+        .banner .meat2,
+        .banner .meat3 {
+            position: absolute;
+            background: linear-gradient(180deg, #b8501f, #6e2a0e);
+            border-radius: 6px;
+            width: 70px;
+            height: 14px;
+        }
+
+        .banner .meat1 {
+            right: 30px;
+            bottom: 60px;
+            transform: rotate(-8deg);
+        }
+
+        .banner .meat2 {
+            right: 26px;
+            bottom: 44px;
+            transform: rotate(4deg);
+        }
+
+        .banner .meat3 {
+            right: 32px;
+            bottom: 28px;
+            transform: rotate(-3deg);
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 14px 0;
+        }
+
+        .service-card {
+            border-radius: 16px;
+            height: 100px;
+            padding: 10px;
+            position: relative;
+            font-weight: 700;
+            font-size: 14px;
+            color: #222;
+            overflow: hidden;
+        }
+
+        .service-card.delivery {
+            background: linear-gradient(180deg, #fff 0%, #d9efb8 100%);
+        }
+
+        .service-card.market {
+            background: linear-gradient(180deg, #fff 0%, #e8d9b8 100%);
+        }
+
+        .service-img {
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 46px;
+        }
+
+        .service-label {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+        }
+
+        .cats {
+            display: flex;
+            gap: 12px;
+            margin: 12px 14px 0;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .cats::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat {
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #333;
+            width: 56px;
+        }
+
+        .cat .ic {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .cat:nth-child(1) .ic {
+            background: #ffe1e1;
+        }
+
+        .cat:nth-child(2) .ic {
+            background: #ffe6f0;
+        }
+
+        .cat:nth-child(3) .ic {
+            background: #fff3c4;
+        }
+
+        .cat:nth-child(4) .ic {
+            background: #ffe9d9;
+        }
+
+        .cat:nth-child(5) .ic {
+            background: #e8f1ff;
+        }
+
+        .cat:nth-child(6) .ic {
+            background: #ffe0e0;
+        }
+
+        .premium {
+            margin: 12px 14px 0;
+            background: #ffd400;
+            border-radius: 14px;
+            padding: 11px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .premium .tag {
+            background: #000;
+            color: #ffd400;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 11px;
+        }
+
+        .bottom-nav {
+            margin-top: 12px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 8px 0 14px;
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            position: relative;
+        }
+
+        .nav-item .ni {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .nav-item.active {
+            color: #e60023;
+        }
+
+        .nav-item .badge {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(8px);
+            background: #e60023;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 8px;
+        }
+
+        /* === ОБЩИЕ ШАГИ ОПРОСА === */
+        .step-header {
+            background: linear-gradient(135deg, #ff1744 0%, #e60023 100%);
+            color: #fff;
+            padding: 44px 20px 20px;
+            position: relative;
+        }
+
+        .step-back {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 14px;
+        }
+
+        .step-progress {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .step-dot {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .step-dot.done {
+            background: #ffd400;
+        }
+
+        .step-dot.active {
+            background: #fff;
+        }
+
+        .step-num {
+            font-size: 11px;
+            font-weight: 700;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 4px;
+            line-height: 1.2;
+        }
+
+        .step-sub {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 6px;
+        }
+
+        .step-body {
+            padding: 20px;
+        }
+
+        /* === БЮДЖЕТ === */
+        .budget-display {
+            text-align: center;
+            margin: 10px 0 20px;
+        }
+
+        .budget-amount {
+            font-size: 48px;
+            font-weight: 800;
+            color: #e60023;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .budget-amount input {
+            font-size: 48px;
+            font-weight: 800;
+            color: #e60023;
+            border: none;
+            outline: none;
+            width: 180px;
+            text-align: right;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .budget-period {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .budget-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #ffe1e1;
+            outline: none;
+            margin: 16px 0;
+        }
+
+        .budget-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e60023;
+            cursor: pointer;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(230, 0, 35, 0.4);
+        }
+
+        .budget-presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .budget-preset {
+            background: #f5f5f5;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .budget-preset:hover,
+        .budget-preset.active {
+            background: #fff0f3;
+            border-color: #e60023;
+            color: #e60023;
+        }
+
+        .budget-info {
+            background: #fff8e1;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #7a5a00;
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* === ТИП ПИТАНИЯ === */
+        .diet-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .diet-card {
+            background: #fff;
+            border: 2px solid #eee;
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .diet-card:hover {
+            border-color: #ffb3c0;
+        }
+
+        .diet-card.selected {
+            border-color: #e60023;
+            background: #fff0f3;
+            box-shadow: 0 4px 16px rgba(230, 0, 35, 0.15);
+        }
+
+        .diet-emoji {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #fff5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .diet-card.selected .diet-emoji {
+            background: #ffe1e1;
+        }
+
+        .diet-title {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .diet-desc {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.3;
+        }
+
+        .diet-tag {
+            display: inline-block;
+            background: #4caf50;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* === ВЫБОР ПЛАНА === */
+        .plan-card {
+            background: #fff;
+            border: 2px solid #eee;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card.selected {
+            border-color: #e60023;
+            box-shadow: 0 6px 18px rgba(230, 0, 35, 0.18);
+        }
+
+        .plan-card.recommended {
+            border-color: #ffd400;
+        }
+
+        .plan-recommend-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffd400;
+            color: #b8001a;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+
+        .plan-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .plan-emoji {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #fff0f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .plan-name {
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .plan-desc {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .plan-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .plan-stat {
+            text-align: center;
+        }
+
+        .plan-stat .v {
+            font-weight: 800;
+            font-size: 14px;
+            color: #222;
+        }
+
+        .plan-stat .l {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .plan-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plan-price {
+            font-weight: 800;
+            font-size: 18px;
+            color: #e60023;
+        }
+
+        .plan-price small {
+            font-size: 11px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .plan-saved {
+            background: #e8f5e9;
+            color: #2a8c3a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        /* === РЕКОМЕНДАЦИИ (КОРЗИНА) === */
+        .recom-summary {
+            background: linear-gradient(135deg, #fff0f3, #fff);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recom-summary .left .t {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .recom-summary .left .v {
+            font-size: 20px;
+            font-weight: 800;
+            color: #e60023;
+        }
+
+        .recom-summary .right {
+            text-align: right;
+        }
+
+        .recom-summary .right .saved {
+            background: #4caf50;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .recom-day {
+            font-size: 12px;
+            font-weight: 800;
+            color: #888;
+            margin: 14px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .product:active {
+            transform: scale(0.98);
+        }
+
+        .product-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background: #fff5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-name {
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .product-meta span {
+            background: #f5f5f5;
+            font-size: 10px;
+            color: #666;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .product-meta .kcal {
+            background: #fff3c4;
+            color: #7a5a00;
+        }
+
+        .product-meta .pp {
+            background: #e8f5e9;
+            color: #2a8c3a;
+        }
+
+        .product-meta .veg {
+            background: #e8f5e9;
+            color: #2a8c3a;
+        }
+
+        .product-meta .sport {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-weight: 800;
+            font-size: 14px;
+            color: #222;
+        }
+
+        .product-old {
+            color: #aaa;
+            text-decoration: line-through;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+
+        .product-discount {
+            background: #e60023;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        /* === КНОПКА ВНИЗУ === */
+        .footer-action {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            padding: 14px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #ff1744, #e60023);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(230, 0, 35, 0.3);
+            transition: transform 0.15s;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* === РЕЗУЛЬТАТ === */
+        .result-screen {
+            background: linear-gradient(180deg, #fff0f3 0%, #fff 50%);
+            min-height: 844px;
+            padding: 44px 20px 20px;
+        }
+
+        .result-check {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4caf50, #2a8c3a);
+            color: #fff;
+            font-size: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 18px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.35);
+            animation: pop 0.5s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+            }
+
+            60% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .result-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .result-sub {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .result-saved-card {
+            background: linear-gradient(135deg, #ffd400, #ffb300);
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 24px rgba(255, 180, 0, 0.35);
+        }
+
+        .result-saved-card .label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #7a5a00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-saved-card .amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: #b8001a;
+            margin: 4px 0;
+        }
+
+        .result-saved-card .desc {
+            font-size: 12px;
+            color: #7a5a00;
+        }
+
+        .result-info-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #fff0f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .result-info-text {
+            flex: 1;
+        }
+
+        .result-info-text .t {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .result-info-text .v {
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .result-bonus {
+            background: linear-gradient(135deg, #fff0f3, #fff);
+            border: 2px dashed #e60023;
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            margin: 14px 0;
+            font-size: 13px;
+        }
+
+        .result-bonus b {
+            color: #e60023;
+            font-size: 16px;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #e60023;
+            border: 2px solid #e60023;
+            border-radius: 14px;
+            padding: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* === ТОСТ === */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #222;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
-  <main class="phone">
+    <div class="phone">
 
-    <!-- PAGE 1 -->
-    <section class="screen active" id="page-1">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">1 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Что хочешь сегодня?</h1>
-          <p class="subtitle">Подберём рецепт и корзину под твой день</p>
-        </div>
-
-        <div class="progress"><span style="width: 16.6%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">🍽️</div>
-
-        <div class="options">
-          <button class="option selected">
-            <div class="option-main">
-              <div class="option-icon">👨‍🍳</div>
-              <div>
-                <div class="option-title">Приготовить самому</div>
-                <div class="option-desc">Подберём простой рецепт</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">⚡</div>
-              <div>
-                <div class="option-title">Быстро и без заморочек</div>
-                <div class="option-desc">Минимум готовки и действий</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">🥪</div>
-              <div>
-                <div class="option-title">Перекус / еда с собой</div>
-                <div class="option-desc">Для учёбы, офиса или дороги</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">🗓️</div>
-              <div>
-                <div class="option-title">Рацион на весь день</div>
-                <div class="option-desc">Завтрак, обед и ужин</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="bottom single">
-        <button class="btn btn-primary" data-go="page-2">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 2 -->
-    <section class="screen" id="page-2">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">2 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>На сколько человек?</h1>
-          <p class="subtitle">Рассчитаем порции и стоимость корзины</p>
-        </div>
-
-        <div class="progress"><span style="width: 33.3%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">🥘</div>
-
-        <div class="options">
-          <button class="option selected">
-            <div class="option-main">
-              <div class="option-icon">🙂</div>
-              <div>
-                <div class="option-title">1 человек</div>
-                <div class="option-desc">Одна порция на сегодня</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">👥</div>
-              <div>
-                <div class="option-title">2 человека</div>
-                <div class="option-desc">Ужин или обед на двоих</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">👨‍👩‍👧</div>
-              <div>
-                <div class="option-title">3–4 человека</div>
-                <div class="option-desc">Для компании или семьи</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">🍱</div>
-              <div>
-                <div class="option-title">С запасом на завтра</div>
-                <div class="option-desc">Чтобы осталось ещё на один приём</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="bottom">
-        <button class="btn btn-secondary" data-go="page-1">Назад</button>
-        <button class="btn btn-primary" data-go="page-4">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 4 -->
-    <section class="screen" id="page-4">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">3 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>На сколько дней рассчитываешь план?</h1>
-          <p class="subtitle">Подстроим покупки и рецепты под твой ритм</p>
-        </div>
-
-        <div class="progress"><span style="width: 50%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">📅</div>
-
-        <div class="input-card">
-          <label class="field-label" for="plan-days">Количество дней</label>
-          <input class="plan-input" id="plan-days" type="number" min="1" placeholder="Например, 5" value="5" />
-          <p class="field-hint">Можно указать любой срок, чтобы собрать план питания и корзину под нужный период.</p>
-        </div>
-
-        <div class="note">
-          Это поможет заранее посчитать объём покупок и подобрать более удобные рецепты.
-        </div>
-      </div>
-
-      <div class="bottom">
-        <button class="btn btn-secondary" data-go="page-2">Назад</button>
-        <button class="btn btn-primary" data-go="page-5">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 5 -->
-    <section class="screen" id="page-5">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">4 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Какой твой бюджет?</h1>
-          <p class="subtitle">Укажи сумму, и мы соберём план без лишних трат</p>
-        </div>
-
-        <div class="progress"><span style="width: 66.6%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">🧾</div>
-
-        <div class="input-card">
-          <label class="field-label" for="plan-budget">Бюджет в рублях</label>
-          <input class="plan-input" id="plan-budget" type="number" min="0" step="50" placeholder="Например, 3500" value="3500" />
-          <p class="field-hint">Ориентируемся на эту сумму при подборе продуктов и общего плана.</p>
-        </div>
-
-        <div class="note">
-          При необходимости бюджет можно будет скорректировать перед оформлением корзины.
-        </div>
-      </div>
-
-      <div class="bottom">
-        <button class="btn btn-secondary" data-go="page-4">Назад</button>
-        <button class="btn btn-primary" data-go="page-6">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 6 -->
-    <section class="screen" id="page-6">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">5 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Что важно по питанию?</h1>
-          <p class="subtitle">Подстроим рецепт под твой запрос</p>
-        </div>
-
-        <div class="progress"><span style="width: 83.3%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">🥗</div>
-
-        <div class="options">
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">⚖️</div>
-              <div>
-                <div class="option-title">Сбалансировано</div>
-                <div class="option-desc">Белки, жиры, углеводы без перекоса</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option selected">
-            <div class="option-main">
-              <div class="option-icon">🥚</div>
-              <div>
-                <div class="option-title">Больше белка</div>
-                <div class="option-desc">Сытнее и полезнее после активного дня</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">🌿</div>
-              <div>
-                <div class="option-title">Полегче по калориям</div>
-                <div class="option-desc">Без тяжёлого ужина</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-
-          <button class="option">
-            <div class="option-main">
-              <div class="option-icon">🍚</div>
-              <div>
-                <div class="option-title">Сытно надолго</div>
-                <div class="option-desc">Чтобы не хотелось перекусывать</div>
-              </div>
-            </div>
-            <div class="check">✓</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="bottom">
-        <button class="btn btn-secondary" data-go="page-5">Назад</button>
-        <button class="btn btn-primary" data-go="page-7">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 7 -->
-    <section class="screen" id="page-7">
-      <div class="hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">6 из 6</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Что исключить?</h1>
-          <p class="subtitle">Учтём аллергии и нелюбимые продукты</p>
-        </div>
-
-        <div class="progress"><span style="width: 100%;"></span></div>
-      </div>
-
-      <div class="content">
-        <div class="soft-bg-icon">✅</div>
-
-        <div class="chip-grid">
-          <button class="chip">Молочка</button>
-          <button class="chip">Глютен</button>
-          <button class="chip">Орехи</button>
-          <button class="chip">Рыба</button>
-          <button class="chip">Мясо</button>
-          <button class="chip">Острое</button>
-          <button class="chip">Сладкое</button>
-          <button class="chip selected">Ничего</button>
-        </div>
-
-        <div class="note">
-          Можно изменить товары перед заказом
-        </div>
-      </div>
-
-      <div class="bottom">
-        <button class="btn btn-secondary" data-go="page-6">Назад</button>
-        <button class="btn btn-primary" data-go="page-8">Дальше</button>
-      </div>
-    </section>
-
-    <!-- PAGE 8 RESULT -->
-    <section class="screen" id="page-8">
-      <div class="hero result-hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">Готово</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Вот что можно приготовить в ближайшие дни</h1>
-          <p class="subtitle">План на 5 дней · бюджет 3500 ₽ · больше белка</p>
-        </div>
-      </div>
-
-      <div class="result-content">
-        <div class="recipe-list">
-
-          <article class="recipe-card best">
-            <div class="badge">Лучший баланс</div>
-
-            <div class="recipe-top">
-              <div>
-                <h2 class="recipe-title">Курица с гречкой и овощами</h2>
-
-                <div class="meta">
-                  <span>20 мин</span>
-                  <span>≈ 360 ₽</span>
-                  <span>1 порция</span>
+        <!-- ============ ЭКРАН 1: ГЛАВНАЯ ============ -->
+        <div class="screen active" id="screen-home">
+            <div class="top-section">
+                <div class="status-bar"><span>6:16</span><span>📶 🔋</span></div>
+                <div class="search-row">
+                    <div class="icon-circle">👤</div>
+                    <div class="search-bar">🔍 Искать товары</div>
+                    <div class="icon-circle">🔔</div>
                 </div>
-              </div>
-
-              <div class="food-photo">🍗</div>
-            </div>
-
-            <p class="kbju">610 ккал · Б 42 · Ж 18 · У 68</p>
-            <p class="ingredients">
-              Куриная грудка, гречка, овощная смесь, йогуртовый соус
-            </p>
-
-            <div class="recipe-actions">
-              <button class="choose-btn">Выбрать</button>
-              <button class="mini-link">Состав</button>
-            </div>
-          </article>
-
-          <article class="recipe-card">
-            <div class="recipe-top">
-              <div>
-                <h2 class="recipe-title">Омлет с творогом и салатом</h2>
-
-                <div class="meta">
-                  <span>15 мин</span>
-                  <span>≈ 290 ₽</span>
-                  <span>1 порция</span>
+                <div class="magnit-plus"><span class="m-logo">M+</span> магнит плюс</div>
+                <div class="cards-row">
+                    <div class="card">
+                        <div class="label">Бонусы</div>
+                        <div class="value">0 M+</div>
+                        <div class="label">К сгоранию</div>
+                        <div class="value" style="margin-bottom:0">0 M+</div>
+                    </div>
+                    <div class="card cashback-card">
+                        <div>
+                            <div class="label">Кешбэк</div>
+                            <div class="label">в апреле</div>
+                        </div>
+                        <button class="btn-red">Выбрать</button>
+                    </div>
+                    <div class="qr-card">
+                        <div class="qr"></div>
+                    </div>
                 </div>
-              </div>
-
-              <div class="food-photo green">🥚</div>
             </div>
 
-            <p class="kbju">520 ккал · Б 38 · Ж 24 · У 34</p>
-            <p class="ingredients">
-              Яйца, творог, огурец, томаты, хлебцы
-            </p>
-
-            <div class="recipe-actions">
-              <button class="choose-btn">Выбрать</button>
-              <button class="mini-link">Состав</button>
-            </div>
-          </article>
-
-          <article class="recipe-card">
-            <div class="recipe-top">
-              <div>
-                <h2 class="recipe-title">Рис с тунцом и яйцом</h2>
-
-                <div class="meta">
-                  <span>15 мин</span>
-                  <span>≈ 340 ₽</span>
-                  <span>1 порция</span>
+            <button class="ration-btn" onclick="goTo('screen-budget')">
+                <span class="ration-badge">★ NEW</span>
+                <div class="ration-illustration">
+                    <div class="emoji-stack">
+                        <span class="e1">🥗</span>
+                        <span class="e2">🍎</span>
+                        <span class="e3">🥑</span>
+                        <span class="e4">🥖</span>
+                    </div>
                 </div>
-              </div>
+                <div class="ration-text">
+                    <span class="small">💰 Магнит советует</span>
+                    <span class="big">Соберём рацион<br>под ваш бюджет</span>
+                    <span class="cta">Начать ›</span>
+                </div>
+            </button>
 
-              <div class="food-photo yellow">🍚</div>
+            <div class="banner">
+                <span class="ad-tag">Реклама</span>
+                <h3>Сезон гриля<br>открыт</h3>
+                <div class="pill">Скидки до 50%</div>
+                <div class="grill-img">
+                    <div class="plate"></div>
+                    <div class="meat1"></div>
+                    <div class="meat2"></div>
+                    <div class="meat3"></div>
+                </div>
             </div>
 
-            <p class="kbju">590 ккал · Б 37 · Ж 17 · У 72</p>
-            <p class="ingredients">
-              Рис, тунец, яйцо, огурец, кукуруза
-            </p>
-
-            <div class="recipe-actions">
-              <button class="choose-btn">Выбрать</button>
-              <button class="mini-link">Состав</button>
+            <div class="services">
+                <div class="service-card delivery">
+                    <div class="service-label">Доставка</div>
+                    <div class="service-img">🧺🥖🧀</div>
+                </div>
+                <div class="service-card market">
+                    <div class="service-label">Маркет</div>
+                    <div class="service-img">🧺☕🍳</div>
+                </div>
             </div>
-          </article>
 
-        </div>
-      </div>
+            <div class="cats">
+                <div class="cat">
+                    <div class="ic">🎁</div>Выгода
+                </div>
+                <div class="cat">
+                    <div class="ic">💄</div>Косметика
+                </div>
+                <div class="cat">
+                    <div class="ic">🏷️</div>Купоны
+                </div>
+                <div class="cat">
+                    <div class="ic">🦆</div>Игры
+                </div>
+                <div class="cat">
+                    <div class="ic">💳</div>Взаймы
+                </div>
+                <div class="cat">
+                    <div class="ic">🔥</div>Скидки
+                </div>
+            </div>
 
-      <div class="result-bottom">
-        <button class="btn btn-secondary" data-go="page-9">Хочу добавить ещё</button>
-        <button class="btn btn-primary">Перейти в корзину</button>
-      </div>
-    </section>
+            <div class="premium">
+                <span>До 50% кешбэка — 30 дней бесплатно</span>
+                <span class="tag">ПРЕМИУМ</span>
+            </div>
 
-    <!-- PAGE 9 ADDITIONS -->
-    <section class="screen" id="page-9">
-      <div class="hero result-hero">
-        <div class="topbar">
-          <div class="brand">
-            <div class="logo">М</div>
-            <span>Магнит Планер</span>
-          </div>
-          <div class="step">Ещё идеи</div>
-        </div>
-
-        <div class="hero-content">
-          <h1>Хочешь добавить что-то ещё?</h1>
-          <p class="subtitle">Подобрали дополнения к твоему выбору: напитки, снеки и удобные мелочи для учебных дней</p>
-        </div>
-      </div>
-
-      <div class="result-content">
-        <div class="suggestion-list">
-          <article class="suggestion-card">
-            <div class="suggestion-top">
-              <h2 class="suggestion-title">Холодный кофе и банан</h2>
-              <span class="suggestion-price">≈ 180 ₽</span>
+            <div class="bottom-nav">
+                <div class="nav-item active"><span class="ni">🏠</span>Главная</div>
+                <div class="nav-item"><span class="ni">🏪</span>В магазине</div>
+                <div class="nav-item"><span class="ni">🛵</span>Доставка<span class="badge">-30%</span></div>
+                <div class="nav-item"><span class="ni">MM</span>Маркет</div>
+                <div class="nav-item"><span class="ni">🌸</span>М.Косметик</div>
             </div>
-            <p class="suggestion-desc">Быстрый вариант перед парами или между занятиями, если нужен лёгкий заряд энергии.</p>
-            <div class="suggestion-meta">
-              <span>напиток</span>
-              <span>быстро</span>
-              <span>студенту</span>
-            </div>
-          </article>
-
-          <article class="suggestion-card">
-            <div class="suggestion-top">
-              <h2 class="suggestion-title">Йогурт и гранола на перекус</h2>
-              <span class="suggestion-price">≈ 220 ₽</span>
-            </div>
-            <p class="suggestion-desc">Подходит к белковому плану и легко помещается в рюкзак, если нужно взять что-то с собой.</p>
-            <div class="suggestion-meta">
-              <span>снек</span>
-              <span>с собой</span>
-              <span>сытно</span>
-            </div>
-          </article>
-
-          <article class="suggestion-card">
-            <div class="suggestion-top">
-              <h2 class="suggestion-title">Ореховый микс и вода</h2>
-              <span class="suggestion-price">≈ 260 ₽</span>
-            </div>
-            <p class="suggestion-desc">Простой набор на долгий учебный день, когда нет времени нормально поесть между делами.</p>
-            <div class="suggestion-meta">
-              <span>перекус</span>
-              <span>на день</span>
-              <span>без готовки</span>
-            </div>
-          </article>
-
-          <article class="suggestion-card">
-            <div class="suggestion-top">
-              <h2 class="suggestion-title">Творожный десерт и чай</h2>
-              <span class="suggestion-price">≈ 210 ₽</span>
-            </div>
-            <p class="suggestion-desc">Небольшое дополнение к корзине, если хочется чего-то приятного без сильного выхода за бюджет.</p>
-            <div class="suggestion-meta">
-              <span>десерт</span>
-              <span>спокойный вечер</span>
-              <span>по бюджету</span>
-            </div>
-          </article>
         </div>
 
-        <div class="more-tile">Посмотреть ещё</div>
+        <!-- ============ ЭКРАН 2: БЮДЖЕТ ============ -->
+        <div class="screen" id="screen-budget">
+            <div class="step-header">
+                <button class="step-back" onclick="goTo('screen-home')">‹</button>
+                <div class="step-progress">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                </div>
+                <div class="step-num">ШАГ 1 ИЗ 3</div>
+                <div class="step-title">Какой у вас<br>бюджет на неделю?</div>
+                <div class="step-sub">Подберём рацион в рамках суммы</div>
+            </div>
+            <div class="step-body">
+                <div class="budget-display">
+                    <div class="budget-amount">
+                        <input type="number" id="budgetInput" value="1500" min="500" max="10000" step="100">
+                        <span>₽</span>
+                    </div>
+                    <div class="budget-period">на 5 дней · ~<span id="perDay">300</span> ₽/день</div>
+                </div>
+                <input type="range" min="500" max="5000" step="100" value="1500" class="budget-slider"
+                    id="budgetSlider">
+                <div class="budget-presets">
+                    <button class="budget-preset" data-v="1000">1 000 ₽</button>
+                    <button class="budget-preset active" data-v="1500">1 500 ₽</button>
+                    <button class="budget-preset" data-v="2500">2 500 ₽</button>
+                    <button class="budget-preset" data-v="3500">3 500 ₽</button>
+                    <button class="budget-preset" data-v="5000">5 000 ₽</button>
+                    <button class="budget-preset" data-v="custom">Свой</button>
+                </div>
+                <div class="budget-info" id="budgetHint">
+                    <span>💡</span>
+                    <div>Студенты экономят в среднем <b>22%</b> с Магнит Планером — за счёт скидок и кешбэка</div>
+                </div>
+            </div>
+            <div class="footer-action">
+                <button class="btn-primary" onclick="goTo('screen-diet')">Далее →</button>
+            </div>
+        </div>
 
-        <p class="small-caption">
-          Эти рекомендации дополняют основной план и подходят под быстрый студенческий ритм.
-        </p>
-      </div>
+        <!-- ============ ЭКРАН 3: ТИП ПИТАНИЯ ============ -->
+        <div class="screen" id="screen-diet">
+            <div class="step-header">
+                <button class="step-back" onclick="goTo('screen-budget')">‹</button>
+                <div class="step-progress">
+                    <div class="step-dot done"></div>
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                </div>
+                <div class="step-num">ШАГ 2 ИЗ 3</div>
+                <div class="step-title">Какой у вас<br>стиль питания?</div>
+                <div class="step-sub">От этого зависит набор продуктов</div>
+            </div>
+            <div class="step-body">
+                <div class="diet-options">
+                    <div class="diet-card" data-diet="pp" onclick="selectDiet(this)">
+                        <div class="diet-emoji">🥗</div>
+                        <div>
+                            <div class="diet-title">Люблю ПП</div>
+                            <div class="diet-desc">Овощи, белки, цельные злаки. Минимум сахара</div>
+                            <span class="diet-tag">⚡ Низкокалорийно</span>
+                        </div>
+                    </div>
+                    <div class="diet-card" data-diet="normal" onclick="selectDiet(this)">
+                        <div class="diet-emoji">🍕</div>
+                        <div>
+                            <div class="diet-title">Не люблю ПП</div>
+                            <div class="diet-desc">Обычная еда — пельмени, макароны, мясо, сладкое</div>
+                        </div>
+                    </div>
+                    <div class="diet-card" data-diet="sport" onclick="selectDiet(this)">
+                        <div class="diet-emoji">💪</div>
+                        <div>
+                            <div class="diet-title">Спортивное питание</div>
+                            <div class="diet-desc">Много белка, сложные углеводы, минимум жира</div>
+                            <span class="diet-tag" style="background:#1565c0">🏋️ Высокобелковое</span>
+                        </div>
+                    </div>
+                    <div class="diet-card" data-diet="veg" onclick="selectDiet(this)">
+                        <div class="diet-emoji">🌱</div>
+                        <div>
+                            <div class="diet-title">Вегетарианское</div>
+                            <div class="diet-desc">Без мяса и рыбы, растительный белок, овощи, крупы</div>
+                            <span class="diet-tag" style="background:#66bb6a">🌿 Растительное</span>
+                        </div>
+                    </div>
+                    <div class="diet-card" data-diet="any" onclick="selectDiet(this)">
+                        <div class="diet-emoji">🤔</div>
+                        <div>
+                            <div class="diet-title">Не знаю / без разницы</div>
+                            <div class="diet-desc">Подберём сбалансированный микс на основе бюджета</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-action">
+                <button class="btn-primary" id="dietNext" disabled onclick="goTo('screen-plans')">Подобрать планы
+                    →</button>
+            </div>
+        </div>
 
-      <div class="result-bottom">
-        <button class="btn btn-secondary" data-go="page-8">Назад</button>
-        <button class="btn btn-primary">Перейти в корзину</button>
-      </div>
-    </section>
+        <!-- ============ ЭКРАН 4: ВЫБОР ПЛАНА ============ -->
+        <div class="screen" id="screen-plans">
+            <div class="step-header">
+                <button class="step-back" onclick="goTo('screen-diet')">‹</button>
+                <div class="step-progress">
+                    <div class="step-dot done"></div>
+                    <div class="step-dot done"></div>
+                    <div class="step-dot active"></div>
+                </div>
+                <div class="step-num">ШАГ 3 ИЗ 3</div>
+                <div class="step-title">3 готовых плана<br>для вас</div>
+                <div class="step-sub" id="plansSub">Бюджет 1 500 ₽ · ПП · 5 дней</div>
+            </div>
+            <div class="step-body" id="plansContainer"></div>
+            <div class="footer-action">
+                <button class="btn-primary" id="plansNext" disabled onclick="goToRecom()">Посмотреть корзину →</button>
+            </div>
+        </div>
 
-  </main>
+        <!-- ============ ЭКРАН 5: РЕКОМЕНДАЦИИ ============ -->
+        <div class="screen" id="screen-recom">
+            <div class="step-header">
+                <button class="step-back" onclick="goTo('screen-plans')">‹</button>
+                <div class="step-num" id="recomCount">ВАША КОРЗИНА · 18 ПОЗИЦИЙ</div>
+                <div class="step-title" id="recomTitle">ПП-минимум на 5 дней</div>
+                <div class="step-sub">Завтрак · обед · ужин — всё включено</div>
+            </div>
+            <div class="step-body" id="recomBody">
+                <!-- генерируется JS -->
+            </div>
+            <div class="footer-action">
+                <button class="btn-primary" id="recomBtn" onclick="goTo('screen-result')">Оформить · 1 420 ₽</button>
+            </div>
+        </div>
 
-  <script>
-    const screens = document.querySelectorAll(".screen");
-    const navButtons = document.querySelectorAll("[data-go]");
+        <!-- ============ ЭКРАН 6: РЕЗУЛЬТАТ ============ -->
+        <div class="screen" id="screen-result">
+            <div class="result-screen" id="resultContent">
+                <!-- генерируется JS -->
+            </div>
+        </div>
 
-    function showPage(pageId) {
-      screens.forEach(screen => {
-        screen.classList.remove("active");
-      });
+    </div>
 
-      const target = document.getElementById(pageId);
-      if (target) {
-        target.classList.add("active");
-        target.scrollTop = 0;
-      }
-    }
+    <div class="toast" id="toast"></div>
 
-    navButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        const page = button.getAttribute("data-go");
-        showPage(page);
-      });
-    });
-
-    const optionGroups = document.querySelectorAll(".options");
-
-    optionGroups.forEach(group => {
-      const options = group.querySelectorAll(".option");
-
-      options.forEach(option => {
-        option.addEventListener("click", () => {
-          options.forEach(item => item.classList.remove("selected"));
-          option.classList.add("selected");
-        });
-      });
-    });
-
-    const chips = document.querySelectorAll(".chip");
-
-    chips.forEach(chip => {
-      chip.addEventListener("click", () => {
-        if (chip.textContent.trim() === "Ничего") {
-          chips.forEach(item => item.classList.remove("selected"));
-          chip.classList.add("selected");
-          return;
+    <script>
+        // === НАВИГАЦИЯ ===
+        function goTo(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+            document.querySelector('.phone').scrollTop = 0;
         }
 
-        const nothingChip = Array.from(chips).find(item => item.textContent.trim() === "Ничего");
-        if (nothingChip) nothingChip.classList.remove("selected");
+        // === БЮДЖЕТ ===
+        const slider = document.getElementById('budgetSlider');
+        const input = document.getElementById('budgetInput');
+        const perDay = document.getElementById('perDay');
+        const presets = document.querySelectorAll('.budget-preset');
 
-        chip.classList.toggle("selected");
-      });
-    });
-  </script>
+        function getBudgetTier(val) {
+            if (val <= 1000) return 'ultra_low';
+            if (val <= 1500) return 'low';
+            if (val <= 2500) return 'medium';
+            if (val <= 3500) return 'high';
+            return 'premium';
+        }
+
+        function updateBudgetHint(val) {
+            const hint = document.getElementById('budgetHint');
+            const tier = getBudgetTier(val);
+            const hints = {
+                ultra_low: '<span>🔥</span><div>Супер-экономия! Подберём <b>максимум продуктов</b> за минимум денег. Акции М+ помогут сэкономить ещё ~15%</div>',
+                low: '<span>💡</span><div>Студенты экономят в среднем <b>22%</b> с Магнит Планером — за счёт скидок и кешбэка</div>',
+                medium: '<span>✨</span><div>Отличный бюджет! Хватит на <b>разнообразное и вкусное</b> питание с запасом на перекусы</div>',
+                high: '<span>🥑</span><div>Можно позволить <b>премиальные продукты</b> — лосось, авокадо, свежие ягоды. Экономия до <b>28%</b></div>',
+                premium: '<span>👑</span><div>Премиум-рацион! Включим <b>деликатесы, суперфуды</b> и фермерские продукты. Максимальный кешбэк М+</div>'
+            };
+            hint.innerHTML = hints[tier];
+        }
+
+        function updateBudget(val) {
+            val = Math.max(500, Math.min(10000, parseInt(val) || 500));
+            input.value = val;
+            if (val <= 5000) slider.value = val;
+            perDay.textContent = Math.round(val / 5);
+            presets.forEach(p => {
+                p.classList.toggle('active', parseInt(p.dataset.v) === val);
+            });
+            updatePlansSub();
+            updateBudgetHint(val);
+        }
+        slider.addEventListener('input', e => updateBudget(e.target.value));
+        input.addEventListener('input', e => updateBudget(e.target.value));
+        presets.forEach(p => {
+            p.addEventListener('click', () => {
+                if (p.dataset.v === 'custom') {
+                    input.focus(); input.select();
+                } else {
+                    updateBudget(p.dataset.v);
+                }
+            });
+        });
+
+        // === ТИП ПИТАНИЯ ===
+        let selectedDiet = null;
+        function selectDiet(card) {
+            document.querySelectorAll('.diet-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedDiet = card.dataset.diet;
+            document.getElementById('dietNext').disabled = false;
+            renderPlans();
+            updatePlansSub();
+        }
+
+        // === ДИНАМИЧЕСКИЕ ПЛАНЫ (зависят от бюджета и типа питания) ===
+        function generatePlans(diet, budget) {
+            const tier = getBudgetTier(budget);
+            const ratio = budget / 1500; // коэффициент масштабирования цены
+
+            const allPlans = {
+                pp: {
+                    ultra_low: [
+                        { name: 'ПП-эконом', emoji: '🥬', desc: 'Каши, яйца, сезонные овощи', kcal: '1 600', protein: '70', items: 14, priceRatio: 0.65, discountPct: 18, recommended: true },
+                        { name: 'Лёгкий старт', emoji: '🥒', desc: 'Минимальный набор для здорового питания', kcal: '1 500', protein: '60', items: 12, priceRatio: 0.60, discountPct: 15 },
+                        { name: 'ПП-базовый', emoji: '🥗', desc: 'Основные продукты + творог и фрукты', kcal: '1 700', protein: '78', items: 16, priceRatio: 0.68, discountPct: 20 }
+                    ],
+                    low: [
+                        { name: 'ПП-минимум', emoji: '🥗', desc: 'Базовый набор для лёгкого питания', kcal: '1 850', protein: '95', items: 18, priceRatio: 0.94, discountPct: 17, recommended: true },
+                        { name: 'ПП-актив', emoji: '💪', desc: 'Больше белка для тренировок', kcal: '2 100', protein: '130', items: 22, priceRatio: 0.98, discountPct: 15 },
+                        { name: 'ПП-вкусно', emoji: '🥑', desc: 'Авокадо, ягоды, полезные перекусы', kcal: '2 000', protein: '110', items: 20, priceRatio: 0.99, discountPct: 18 }
+                    ],
+                    medium: [
+                        { name: 'ПП-комфорт', emoji: '🥗', desc: 'Разнообразно и вкусно, свежие продукты', kcal: '2 000', protein: '105', items: 22, priceRatio: 0.92, discountPct: 16, recommended: true },
+                        { name: 'ПП-детокс', emoji: '🍵', desc: 'Зелёные смузи, суперфуды, лёгкие блюда', kcal: '1 700', protein: '85', items: 20, priceRatio: 0.88, discountPct: 20 },
+                        { name: 'ПП-фитнес', emoji: '🏃', desc: 'Белок + сложные углеводы для активных', kcal: '2 200', protein: '135', items: 24, priceRatio: 0.96, discountPct: 15 }
+                    ],
+                    high: [
+                        { name: 'ПП-премиум', emoji: '🥑', desc: 'Лосось, авокадо, киноа, свежие ягоды', kcal: '2 100', protein: '120', items: 26, priceRatio: 0.90, discountPct: 18, recommended: true },
+                        { name: 'ПП-гурман', emoji: '🍣', desc: 'Красная рыба, микрозелень, суперфуды', kcal: '2 000', protein: '115', items: 24, priceRatio: 0.94, discountPct: 16 },
+                        { name: 'ПП-семейный', emoji: '👨‍👩‍👧', desc: 'На двоих — полезно и экономно', kcal: '1 900', protein: '100', items: 30, priceRatio: 0.96, discountPct: 22 }
+                    ],
+                    premium: [
+                        { name: 'ПП-люкс', emoji: '👑', desc: 'Фермерские продукты, органика, суперфуды', kcal: '2 100', protein: '125', items: 28, priceRatio: 0.88, discountPct: 20, recommended: true },
+                        { name: 'ПП-детокс PRO', emoji: '🌿', desc: 'Спирулина, чиа, свежие соки каждый день', kcal: '1 800', protein: '90', items: 24, priceRatio: 0.85, discountPct: 18 },
+                        { name: 'ПП-максимум', emoji: '⭐', desc: 'Всё лучшее: рыба, мясо, овощи, ягоды', kcal: '2 300', protein: '140', items: 32, priceRatio: 0.92, discountPct: 22 }
+                    ]
+                },
+                normal: {
+                    ultra_low: [
+                        { name: 'Студенческий мини', emoji: '🍜', desc: 'Лапша, яйца, хлеб, сосиски', kcal: '2 000', protein: '55', items: 12, priceRatio: 0.62, discountPct: 16, recommended: true },
+                        { name: 'Базовый набор', emoji: '🍞', desc: 'Хлеб, макароны, картошка, курица', kcal: '2 200', protein: '65', items: 14, priceRatio: 0.66, discountPct: 14 },
+                        { name: 'Эконом-сытый', emoji: '🥘', desc: 'Пельмени, каша, консервы', kcal: '2 400', protein: '60', items: 13, priceRatio: 0.64, discountPct: 18 }
+                    ],
+                    low: [
+                        { name: 'Сытно и просто', emoji: '🍝', desc: 'Макароны, котлеты, картошка', kcal: '2 200', protein: '80', items: 19, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Студенческий', emoji: '🍕', desc: 'Пельмени, сосиски, готовые блюда', kcal: '2 400', protein: '75', items: 17, priceRatio: 0.97, discountPct: 15 },
+                        { name: 'Домашний обед', emoji: '🥘', desc: 'Супы, гарниры, мясо', kcal: '2 100', protein: '90', items: 21, priceRatio: 0.99, discountPct: 16 }
+                    ],
+                    medium: [
+                        { name: 'Домашняя кухня', emoji: '🍲', desc: 'Борщ, котлеты, пюре — как у мамы', kcal: '2 300', protein: '95', items: 24, priceRatio: 0.93, discountPct: 18, recommended: true },
+                        { name: 'Мясоед', emoji: '🥩', desc: 'Свинина, курица, колбаса + гарниры', kcal: '2 500', protein: '110', items: 22, priceRatio: 0.96, discountPct: 15 },
+                        { name: 'Разнообразный', emoji: '🍽️', desc: 'Всего понемногу: и мясо, и рыба, и овощи', kcal: '2 200', protein: '90', items: 26, priceRatio: 0.95, discountPct: 17 }
+                    ],
+                    high: [
+                        { name: 'Обильный стол', emoji: '🥘', desc: 'Мясо, рыба, сыры, выпечка', kcal: '2 400', protein: '105', items: 28, priceRatio: 0.91, discountPct: 19, recommended: true },
+                        { name: 'Гурман', emoji: '🧀', desc: 'Качественные колбасы, сыры, деликатесы', kcal: '2 300', protein: '100', items: 26, priceRatio: 0.94, discountPct: 17 },
+                        { name: 'Семейный ужин', emoji: '👨‍👩‍👧‍👦', desc: 'На семью — сытно и с запасом', kcal: '2 200', protein: '95', items: 32, priceRatio: 0.96, discountPct: 22 }
+                    ],
+                    premium: [
+                        { name: 'Праздничный', emoji: '🎉', desc: 'Стейки, морепродукты, деликатесы', kcal: '2 500', protein: '120', items: 30, priceRatio: 0.89, discountPct: 20, recommended: true },
+                        { name: 'Фуди-набор', emoji: '🍱', desc: 'Необычные соусы, специи, импортные продукты', kcal: '2 200', protein: '100', items: 28, priceRatio: 0.92, discountPct: 18 },
+                        { name: 'Шеф-корзина', emoji: '👨‍🍳', desc: 'Всё для готовки ресторанных блюд дома', kcal: '2 400', protein: '115', items: 34, priceRatio: 0.94, discountPct: 22 }
+                    ]
+                },
+                sport: {
+                    ultra_low: [
+                        { name: 'Белок-минимум', emoji: '🥚', desc: 'Яйца, творог, курица, гречка', kcal: '2 100', protein: '110', items: 14, priceRatio: 0.65, discountPct: 16, recommended: true },
+                        { name: 'Сушка-эконом', emoji: '🏋️', desc: 'Минимум жира, максимум белка', kcal: '1 800', protein: '120', items: 13, priceRatio: 0.63, discountPct: 14 },
+                        { name: 'Масса-бюджет', emoji: '💪', desc: 'Калории из каш и молочки', kcal: '2 500', protein: '100', items: 15, priceRatio: 0.67, discountPct: 18 }
+                    ],
+                    low: [
+                        { name: 'Спорт-базовый', emoji: '💪', desc: 'Курица, творог, гречка, овощи', kcal: '2 300', protein: '130', items: 20, priceRatio: 0.95, discountPct: 16, recommended: true },
+                        { name: 'Сушка-лайт', emoji: '🏃', desc: 'Высокий белок, минимум углеводов', kcal: '1 900', protein: '140', items: 18, priceRatio: 0.93, discountPct: 14 },
+                        { name: 'Набор массы', emoji: '🥩', desc: 'Много калорий из чистых продуктов', kcal: '2 800', protein: '120', items: 22, priceRatio: 0.98, discountPct: 15 }
+                    ],
+                    medium: [
+                        { name: 'Спорт-комфорт', emoji: '🏆', desc: 'Разнообразный белок + сложные углеводы', kcal: '2 500', protein: '145', items: 24, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Кроссфит-набор', emoji: '🔥', desc: 'Энергия для интенсивных тренировок', kcal: '2 700', protein: '130', items: 22, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Восстановление', emoji: '🧘', desc: 'Антиоксиданты, Омега-3, лёгкий белок', kcal: '2 100', protein: '110', items: 26, priceRatio: 0.92, discountPct: 18 }
+                    ],
+                    high: [
+                        { name: 'Спорт-про', emoji: '🥇', desc: 'Лосось, индейка, орехи, авокадо', kcal: '2 600', protein: '155', items: 28, priceRatio: 0.91, discountPct: 19, recommended: true },
+                        { name: 'Марафонец', emoji: '🏃‍♂️', desc: 'Углеводная загрузка + качественный белок', kcal: '2 800', protein: '135', items: 26, priceRatio: 0.93, discountPct: 17 },
+                        { name: 'Бодибилдер', emoji: '💪', desc: 'Максимум белка из натуральных продуктов', kcal: '2 400', protein: '170', items: 30, priceRatio: 0.95, discountPct: 20 }
+                    ],
+                    premium: [
+                        { name: 'Спорт-элит', emoji: '🏅', desc: 'Стейки, морепродукты, суперфуды, орехи', kcal: '2 700', protein: '165', items: 32, priceRatio: 0.88, discountPct: 22, recommended: true },
+                        { name: 'Биохакер', emoji: '🧬', desc: 'MCT-масло, чиа, спирулина, фермерское мясо', kcal: '2 300', protein: '140', items: 28, priceRatio: 0.86, discountPct: 20 },
+                        { name: 'Чемпион', emoji: '🏆', desc: 'Полный рацион олимпийца из натуральных продуктов', kcal: '3 000', protein: '180', items: 36, priceRatio: 0.92, discountPct: 24 }
+                    ]
+                },
+                veg: {
+                    ultra_low: [
+                        { name: 'Веган-минимум', emoji: '🌱', desc: 'Крупы, бобовые, сезонные овощи', kcal: '1 700', protein: '55', items: 13, priceRatio: 0.60, discountPct: 16, recommended: true },
+                        { name: 'Постный набор', emoji: '🥕', desc: 'Картошка, морковь, капуста, горох', kcal: '1 800', protein: '50', items: 12, priceRatio: 0.58, discountPct: 14 },
+                        { name: 'Зелёный старт', emoji: '🥬', desc: 'Базовые овощи + яйца и молочка', kcal: '1 600', protein: '60', items: 14, priceRatio: 0.63, discountPct: 18 }
+                    ],
+                    low: [
+                        { name: 'Вегетарианский базовый', emoji: '🌱', desc: 'Крупы, овощи, яйца, молочные продукты', kcal: '1 900', protein: '70', items: 18, priceRatio: 0.93, discountPct: 16, recommended: true },
+                        { name: 'Лакто-вег', emoji: '🧀', desc: 'С сырами, йогуртами и молоком', kcal: '2 000', protein: '78', items: 20, priceRatio: 0.97, discountPct: 14 },
+                        { name: 'Ово-вег', emoji: '🥚', desc: 'С яйцами, без молочных продуктов', kcal: '1 800', protein: '72', items: 17, priceRatio: 0.95, discountPct: 17 }
+                    ],
+                    medium: [
+                        { name: 'Вег-комфорт', emoji: '🥗', desc: 'Тофу, хумус, разнообразные овощи', kcal: '2 000', protein: '80', items: 22, priceRatio: 0.92, discountPct: 17, recommended: true },
+                        { name: 'Средиземноморский', emoji: '🫒', desc: 'Оливки, томаты, сыр фета, зелень', kcal: '2 100', protein: '75', items: 24, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Азиатский вег', emoji: '🍜', desc: 'Тофу, рис, соевый соус, овощи вок', kcal: '1 900', protein: '70', items: 20, priceRatio: 0.90, discountPct: 18 }
+                    ],
+                    high: [
+                        { name: 'Вег-премиум', emoji: '🥑', desc: 'Авокадо, орехи, киноа, свежие ягоды', kcal: '2 100', protein: '85', items: 26, priceRatio: 0.90, discountPct: 18, recommended: true },
+                        { name: 'Суперфуд-вег', emoji: '🫐', desc: 'Чиа, годжи, кокос, миндальное молоко', kcal: '1 900', protein: '75', items: 24, priceRatio: 0.93, discountPct: 16 },
+                        { name: 'Вег-семейный', emoji: '👨‍👩‍👧', desc: 'Разнообразно для всей семьи', kcal: '2 000', protein: '80', items: 30, priceRatio: 0.95, discountPct: 22 }
+                    ],
+                    premium: [
+                        { name: 'Вег-люкс', emoji: '👑', desc: 'Органические овощи, трюфели, орехи макадамия', kcal: '2 100', protein: '90', items: 28, priceRatio: 0.87, discountPct: 20, recommended: true },
+                        { name: 'Raw-вег', emoji: '🥝', desc: 'Сыроедческие блюда, смузи, проростки', kcal: '1 700', protein: '65', items: 24, priceRatio: 0.84, discountPct: 18 },
+                        { name: 'Эко-гурман', emoji: '🌻', desc: 'Фермерские овощи, крафтовые сыры, редкие крупы', kcal: '2 200', protein: '95', items: 32, priceRatio: 0.92, discountPct: 24 }
+                    ]
+                },
+                any: {
+                    ultra_low: [
+                        { name: 'Микс-эконом', emoji: '💰', desc: 'Максимум еды за минимум денег', kcal: '2 000', protein: '65', items: 14, priceRatio: 0.63, discountPct: 18, recommended: true },
+                        { name: 'Простой набор', emoji: '🛒', desc: 'Всё необходимое без излишеств', kcal: '1 900', protein: '60', items: 13, priceRatio: 0.60, discountPct: 15 },
+                        { name: 'Антикризис', emoji: '🔥', desc: 'Акционные товары + базовые продукты', kcal: '2 100', protein: '70', items: 15, priceRatio: 0.65, discountPct: 22 }
+                    ],
+                    low: [
+                        { name: 'Классический микс', emoji: '🍽️', desc: 'Сбалансированно: и ПП, и обычное', kcal: '2 000', protein: '90', items: 19, priceRatio: 0.94, discountPct: 16, recommended: true },
+                        { name: 'Эконом-набор', emoji: '💸', desc: 'Максимум еды за минимум денег', kcal: '2 100', protein: '78', items: 22, priceRatio: 0.92, discountPct: 18 },
+                        { name: 'Премиум-вкус', emoji: '⭐', desc: 'Вкусно и разнообразно', kcal: '1 950', protein: '100', items: 18, priceRatio: 0.99, discountPct: 14 }
+                    ],
+                    medium: [
+                        { name: 'Золотая середина', emoji: '⚖️', desc: 'Идеальный баланс цены и качества', kcal: '2 100', protein: '95', items: 24, priceRatio: 0.93, discountPct: 17, recommended: true },
+                        { name: 'Всего понемногу', emoji: '🍽️', desc: 'Мясо, рыба, овощи, фрукты, крупы', kcal: '2 200', protein: '90', items: 26, priceRatio: 0.95, discountPct: 15 },
+                        { name: 'Умный выбор', emoji: '🧠', desc: 'Оптимизировано по КБЖУ и стоимости', kcal: '2 000', protein: '100', items: 22, priceRatio: 0.91, discountPct: 19 }
+                    ],
+                    high: [
+                        { name: 'Разнообразный', emoji: '🌈', desc: 'Широкий ассортимент для любого настроения', kcal: '2 200', protein: '105', items: 28, priceRatio: 0.91, discountPct: 18, recommended: true },
+                        { name: 'Гурман-микс', emoji: '🧑‍🍳', desc: 'Интересные сочетания и новые вкусы', kcal: '2 100', protein: '100', items: 26, priceRatio: 0.93, discountPct: 16 },
+                        { name: 'Запас на неделю+', emoji: '📦', desc: 'С запасом — хватит даже на гостей', kcal: '2 300', protein: '95', items: 32, priceRatio: 0.95, discountPct: 21 }
+                    ],
+                    premium: [
+                        { name: 'Всё лучшее', emoji: '💎', desc: 'Премиальные продукты на каждый день', kcal: '2 200', protein: '120', items: 30, priceRatio: 0.88, discountPct: 20, recommended: true },
+                        { name: 'Мишлен дома', emoji: '🌟', desc: 'Деликатесы для ресторанных блюд', kcal: '2 100', protein: '110', items: 28, priceRatio: 0.90, discountPct: 18 },
+                        { name: 'Максимум-плюс', emoji: '🚀', desc: 'Полная корзина без ограничений', kcal: '2 500', protein: '130', items: 36, priceRatio: 0.93, discountPct: 24 }
+                    ]
+                }
+            };
+
+            const plans = allPlans[diet]?.[tier] || allPlans.any[tier];
+            return plans.map(p => {
+                const price = Math.round(budget * p.priceRatio / 10) * 10;
+                const oldPrice = Math.round(price / (1 - p.discountPct / 100) / 10) * 10;
+                return { ...p, price, old: oldPrice, saved: oldPrice - price };
+            });
+        }
+
+        let selectedPlan = null;
+
+        function renderPlans() {
+            const container = document.getElementById('plansContainer');
+            const budget = parseInt(input.value) || 1500;
+            const data = generatePlans(selectedDiet || 'any', budget);
+            container.innerHTML = '';
+            selectedPlan = null;
+            document.getElementById('plansNext').disabled = true;
+
+            data.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'plan-card' + (p.recommended ? ' recommended' : '');
+                div.innerHTML = `
+        ${p.recommended ? '<span class="plan-recommend-tag">★ ХИТ</span>' : ''}
+        <div class="plan-head">
+          <div class="plan-emoji">${p.emoji}</div>
+          <div>
+            <div class="plan-name">${p.name}</div>
+            <div class="plan-desc">${p.desc}</div>
+          </div>
+        </div>
+        <div class="plan-stats">
+          <div class="plan-stat"><div class="v">${p.items}</div><div class="l">товаров</div></div>
+          <div class="plan-stat"><div class="v">${p.kcal}</div><div class="l">ккал/день</div></div>
+          <div class="plan-stat"><div class="v">Б ${p.protein}г</div><div class="l">/день</div></div>
+        </div>
+        <div class="plan-bottom">
+          <div class="plan-price">${p.price} ₽ <small>/ 5 дней</small></div>
+          <span class="plan-saved">−${p.saved} ₽</span>
+        </div>
+      `;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+                    div.classList.add('selected');
+                    selectedPlan = p;
+                    document.getElementById('plansNext').disabled = false;
+                });
+                container.appendChild(div);
+            });
+        }
+
+        function updatePlansSub() {
+            const dietLabels = { pp: 'ПП', normal: 'Обычное', sport: 'Спортивное', veg: 'Вегетарианское', any: 'Микс' };
+            const dietLabel = dietLabels[selectedDiet] || '—';
+            document.getElementById('plansSub').textContent = `Бюджет ${input.value} ₽ · ${dietLabel} · 5 дней`;
+        }
+
+        // === ПРОДУКТОВАЯ БАЗА ===
+        const productDB = {
+            pp: {
+                breakfast: [
+                    { emoji: '🥣', name: 'Овсяные хлопья «Геркулес» 500 г', kcal: '355 ккал/100г', tags: ['ПП'], qty: '×1 шт', basePr: 69, oldPr: 89, disc: '−22%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🍌', name: 'Бананы, 1 кг', kcal: '89 ккал/100г', tags: [], qty: '×1 кг', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🫐', name: 'Черника замороженная 300 г', kcal: '57 ккал/100г', tags: ['ПП'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🥛', name: 'Кефир 1% 900 мл', kcal: '40 ккал/100г', tags: ['ПП'], qty: '×2 шт', basePr: 75, oldPr: 89, disc: '−16%' },
+                ],
+                lunch: [
+                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1 кг', basePr: 269, oldPr: 329, disc: '−18%' },
+                    { emoji: '🍚', name: 'Рис круглозерный 900 г', kcal: '344 ккал/100г', tags: [], qty: '×1 уп', basePr: 79, oldPr: null, disc: null },
+                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 118, oldPr: 158, disc: '−25%' },
+                    { emoji: '🥬', name: 'Брокколи заморож. 400 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×1 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🫘', name: 'Чечевица красная 450 г', kcal: '310 ккал/100г', tags: ['Б 24г'], qty: '×1 уп', basePr: 99, oldPr: 129, disc: '−23%' },
+                ],
+                dinner: [
+                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×1 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🥑', name: 'Авокадо, 1 шт', kcal: '160 ккал/100г', tags: ['ПП'], qty: '×2 шт', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🍅', name: 'Томаты черри 250 г', kcal: '18 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                ]
+            },
+            normal: {
+                breakfast: [
+                    { emoji: '🍞', name: 'Хлеб нарезной белый', kcal: '265 ккал/100г', tags: [], qty: '×2 шт', basePr: 39, oldPr: null, disc: null },
+                    { emoji: '🧈', name: 'Масло сливочное 180 г', kcal: '748 ккал/100г', tags: [], qty: '×1 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🌭', name: 'Сосиски молочные 400 г', kcal: '266 ккал/100г', tags: [], qty: '×1 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: [], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🥞', name: 'Блины замороженные 420 г', kcal: '215 ккал/100г', tags: [], qty: '×1 уп', basePr: 109, oldPr: 139, disc: '−22%' },
+                ],
+                lunch: [
+                    { emoji: '🥟', name: 'Пельмени «Магнит» 900 г', kcal: '245 ккал/100г', tags: [], qty: '×1 уп', basePr: 189, oldPr: 249, disc: '−24%' },
+                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×2 уп', basePr: 55, oldPr: null, disc: null },
+                    { emoji: '🍗', name: 'Окорочка куриные 1 кг', kcal: '185 ккал/100г', tags: [], qty: '×1 кг', basePr: 169, oldPr: 219, disc: '−23%' },
+                    { emoji: '🥔', name: 'Картофель, 2 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 69, oldPr: null, disc: null },
+                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×2 бн', basePr: 159, oldPr: 199, disc: '−20%' },
+                ],
+                dinner: [
+                    { emoji: '🥩', name: 'Котлеты «Домашние» 400 г', kcal: '230 ккал/100г', tags: [], qty: '×1 уп', basePr: 179, oldPr: 229, disc: '−22%' },
+                    { emoji: '🍜', name: 'Лапша быстрого приг. ×5', kcal: '400 ккал/100г', tags: [], qty: '×1 уп', basePr: 89, oldPr: null, disc: null },
+                    { emoji: '🧀', name: 'Сыр «Российский» 200 г', kcal: '364 ккал/100г', tags: [], qty: '×1 уп', basePr: 149, oldPr: 189, disc: '−21%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🍰', name: 'Пирожное «Картошка» 2 шт', kcal: '330 ккал/100г', tags: [], qty: '×1 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                ]
+            },
+            sport: {
+                breakfast: [
+                    { emoji: '🥚', name: 'Яйца куриные С0, 10 шт', kcal: '157 ккал/100г', tags: ['Б 13г', 'sport'], qty: '×2 уп', basePr: 129, oldPr: 159, disc: '−19%' },
+                    { emoji: '🥣', name: 'Овсянка цельнозерновая 500 г', kcal: '352 ккал/100г', tags: ['sport'], qty: '×1 уп', basePr: 79, oldPr: null, disc: null },
+                    { emoji: '🍌', name: 'Бананы, 1,5 кг', kcal: '89 ккал/100г', tags: [], qty: '×1,5 кг', basePr: 129, oldPr: 169, disc: '−24%' },
+                    { emoji: '🥜', name: 'Арахисовая паста 250 г', kcal: '590 ккал/100г', tags: ['Б 25г'], qty: '×1 бн', basePr: 179, oldPr: 229, disc: '−22%' },
+                    { emoji: '🥛', name: 'Молоко 2,5% 1 л', kcal: '54 ккал/100г', tags: ['Б 3г'], qty: '×3 уп', basePr: 75, oldPr: 89, disc: '−16%' },
+                ],
+                lunch: [
+                    { emoji: '🍗', name: 'Грудка куриная охл. 1 кг', kcal: '113 ккал/100г', tags: ['Б 24г', 'sport'], qty: '×1,5 кг', basePr: 389, oldPr: 469, disc: '−17%' },
+                    { emoji: '🍚', name: 'Гречка ядрица 900 г', kcal: '313 ккал/100г', tags: ['sport'], qty: '×2 уп', basePr: 89, oldPr: null, disc: null },
+                    { emoji: '🥦', name: 'Брокколи свежая, 500 г', kcal: '34 ккал/100г', tags: ['ПП'], qty: '×2 уп', basePr: 129, oldPr: 169, disc: '−24%' },
+                    { emoji: '🦃', name: 'Индейка филе охл. 600 г', kcal: '104 ккал/100г', tags: ['Б 22г'], qty: '×1 уп', basePr: 319, oldPr: 399, disc: '−20%' },
+                    { emoji: '🫘', name: 'Фасоль консерв. 400 г', kcal: '99 ккал/100г', tags: ['Б 7г'], qty: '×2 бн', basePr: 69, oldPr: 89, disc: '−22%' },
+                ],
+                dinner: [
+                    { emoji: '🥛', name: 'Творог 2%, 300 г', kcal: '103 ккал/100г', tags: ['Б 18г', 'sport'], qty: '×4 уп', basePr: 99, oldPr: 129, disc: '−23%' },
+                    { emoji: '🐟', name: 'Тунец консерв. 185 г', kcal: '96 ккал/100г', tags: ['Б 21г'], qty: '×3 бн', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🥗', name: 'Салат микс 150 г', kcal: '20 ккал/100г', tags: ['ПП'], qty: '×3 уп', basePr: 89, oldPr: 109, disc: '−18%' },
+                    { emoji: '🥜', name: 'Миндаль 200 г', kcal: '575 ккал/100г', tags: ['Б 21г'], qty: '×1 уп', basePr: 199, oldPr: 259, disc: '−23%' },
+                    { emoji: '🍠', name: 'Батат (сладкий картофель) 500 г', kcal: '86 ккал/100г', tags: ['sport'], qty: '×1 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                ]
+            },
+            veg: {
+                breakfast: [
+                    { emoji: '🥣', name: 'Гранола с орехами 300 г', kcal: '420 ккал/100г', tags: ['veg'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🥛', name: 'Молоко овсяное 1 л', kcal: '48 ккал/100г', tags: ['veg'], qty: '×2 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🍎', name: 'Яблоки Гала, 1 кг', kcal: '52 ккал/100г', tags: [], qty: '×1 кг', basePr: 99, oldPr: 129, disc: '−23%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🍯', name: 'Мёд натуральный 350 г', kcal: '304 ккал/100г', tags: ['veg'], qty: '×1 бн', basePr: 199, oldPr: 259, disc: '−23%' },
+                ],
+                lunch: [
+                    { emoji: '🫘', name: 'Нут 450 г', kcal: '364 ккал/100г', tags: ['Б 19г', 'veg'], qty: '×1 уп', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🍚', name: 'Булгур 500 г', kcal: '342 ккал/100г', tags: ['veg'], qty: '×1 уп', basePr: 85, oldPr: null, disc: null },
+                    { emoji: '🫑', name: 'Перец болгарский, 500 г', kcal: '27 ккал/100г', tags: ['veg'], qty: '×0,5 кг', basePr: 109, oldPr: 139, disc: '−22%' },
+                    { emoji: '🧀', name: 'Сыр Адыгейский 300 г', kcal: '264 ккал/100г', tags: ['Б 18г'], qty: '×1 уп', basePr: 159, oldPr: 199, disc: '−20%' },
+                    { emoji: '🍆', name: 'Баклажаны, 500 г', kcal: '25 ккал/100г', tags: ['veg'], qty: '×0,5 кг', basePr: 79, oldPr: 99, disc: '−20%' },
+                ],
+                dinner: [
+                    { emoji: '🥗', name: 'Тофу 300 г', kcal: '76 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×2 уп', basePr: 139, oldPr: 179, disc: '−22%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🥕', name: 'Морковь свежая, 1 кг', kcal: '41 ккал/100г', tags: ['veg'], qty: '×1 кг', basePr: 35, oldPr: null, disc: null },
+                    { emoji: '🫒', name: 'Хумус 200 г', kcal: '166 ккал/100г', tags: ['Б 8г', 'veg'], qty: '×2 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                ]
+            },
+            any: {
+                breakfast: [
+                    { emoji: '🥣', name: 'Овсяные хлопья «Геркулес» 500 г', kcal: '355 ккал/100г', tags: [], qty: '×1 шт', basePr: 69, oldPr: 89, disc: '−22%' },
+                    { emoji: '🥚', name: 'Яйца куриные С1, 10 шт', kcal: '157 ккал/100г', tags: ['Б 12г'], qty: '×1 уп', basePr: 99, oldPr: null, disc: 'M+' },
+                    { emoji: '🍌', name: 'Бананы, 1 кг', kcal: '89 ккал/100г', tags: [], qty: '×1 кг', basePr: 89, oldPr: 119, disc: '−25%' },
+                    { emoji: '🧈', name: 'Масло сливочное 180 г', kcal: '748 ккал/100г', tags: [], qty: '×1 уп', basePr: 119, oldPr: 149, disc: '−20%' },
+                    { emoji: '🍞', name: 'Хлеб нарезной', kcal: '265 ккал/100г', tags: [], qty: '×1 шт', basePr: 39, oldPr: null, disc: null },
+                ],
+                lunch: [
+                    { emoji: '🍗', name: 'Филе куриное охл., 1 кг', kcal: '110 ккал/100г', tags: ['Б 23г'], qty: '×1 кг', basePr: 269, oldPr: 329, disc: '−18%' },
+                    { emoji: '🍝', name: 'Макароны спагетти 450 г', kcal: '350 ккал/100г', tags: [], qty: '×1 уп', basePr: 55, oldPr: null, disc: null },
+                    { emoji: '🥦', name: 'Овощная смесь заморож. 400 г', kcal: '42 ккал/100г', tags: [], qty: '×2 уп', basePr: 118, oldPr: 158, disc: '−25%' },
+                    { emoji: '🥔', name: 'Картофель, 2 кг', kcal: '77 ккал/100г', tags: [], qty: '×1 уп', basePr: 69, oldPr: null, disc: null },
+                    { emoji: '🥫', name: 'Тушёнка говяжья 325 г', kcal: '220 ккал/100г', tags: [], qty: '×1 бн', basePr: 159, oldPr: 199, disc: '−20%' },
+                ],
+                dinner: [
+                    { emoji: '🐟', name: 'Минтай филе 400 г', kcal: '72 ккал/100г', tags: ['Б 17г'], qty: '×1 уп', basePr: 189, oldPr: null, disc: 'M+ 5%' },
+                    { emoji: '🥒', name: 'Огурцы свежие, 1 кг', kcal: '15 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 59, oldPr: null, disc: null },
+                    { emoji: '🥛', name: 'Творог 5%, 200 г', kcal: '121 ккал/100г', tags: ['Б 16г'], qty: '×3 уп', basePr: 79, oldPr: 99, disc: '−20%' },
+                    { emoji: '🧀', name: 'Сыр «Российский» 200 г', kcal: '364 ккал/100г', tags: [], qty: '×1 уп', basePr: 149, oldPr: 189, disc: '−21%' },
+                    { emoji: '🍅', name: 'Томаты свежие, 500 г', kcal: '20 ккал/100г', tags: [], qty: '×0,5 кг', basePr: 79, oldPr: 99, disc: '−20%' },
+                ]
+            }
+        };
+
+        // === Выбор продуктов в зависимости от бюджета ===
+        function selectProducts(diet, budget) {
+            const tier = getBudgetTier(budget);
+            const db = productDB[diet] || productDB.any;
+            const ratio = budget / 1500;
+
+            // Количество продуктов на приём зависит от бюджета
+            const countMap = {
+                ultra_low: { b: 2, l: 2, d: 2 },
+                low: { b: 3, l: 3, d: 3 },
+                medium: { b: 3, l: 4, d: 3 },
+                high: { b: 4, l: 4, d: 4 },
+                premium: { b: 5, l: 5, d: 5 }
+            };
+            const counts = countMap[tier];
+
+            function pick(arr, n) {
+                // Для дешёвых бюджетов берём самые дешёвые товары
+                const sorted = [...arr].sort((a, b) => a.basePr - b.basePr);
+                if (tier === 'ultra_low') return sorted.slice(0, n);
+                if (tier === 'premium') return sorted.slice(-n); // самые дорогие
+                // Для средних — микс
+                return arr.slice(0, n);
+            }
+
+            function adjustPrice(product) {
+                // Масштабируем цены под бюджет (премиум — дороже, эконом — дешевле)
+                const mult = tier === 'ultra_low' ? 0.85 :
+                    tier === 'low' ? 1.0 :
+                        tier === 'medium' ? 1.1 :
+                            tier === 'high' ? 1.25 :
+                                1.45;
+                const pr = Math.round(product.basePr * mult);
+                const old = product.oldPr ? Math.round(product.oldPr * mult) : null;
+                return { ...product, displayPr: pr, displayOld: old };
+            }
+
+            return {
+                breakfast: pick(db.breakfast, counts.b).map(adjustPrice),
+                lunch: pick(db.lunch, counts.l).map(adjustPrice),
+                dinner: pick(db.dinner, counts.d).map(adjustPrice),
+            };
+        }
+
+        // === РЕНДЕР РЕКОМЕНДАЦИЙ ===
+        function goToRecom() {
+            renderRecom();
+            goTo('screen-recom');
+        }
+
+        function renderRecom() {
+            const diet = selectedDiet || 'any';
+            const budget = parseInt(input.value) || 1500;
+            const plan = selectedPlan;
+            if (!plan) return;
+
+            const products = selectProducts(diet, budget);
+            const allProducts = [...products.breakfast, ...products.lunch, ...products.dinner];
+            const totalPrice = allProducts.reduce((s, p) => s + p.displayPr, 0);
+            const totalOld = allProducts.reduce((s, p) => s + (p.displayOld || p.displayPr), 0);
+            const saved = totalOld - totalPrice;
+            const itemCount = allProducts.length;
+
+            // Обновить заголовки
+            document.getElementById('recomTitle').textContent = plan.name + ' на 5 дней';
+            document.getElementById('recomCount').textContent = `ВАША КОРЗИНА · ${itemCount} ПОЗИЦИЙ`;
+
+            const mealLabels = {
+                breakfast: '🥚 Завтраки (5 дней)',
+                lunch: '🍲 Обеды (5 дней)',
+                dinner: '🌙 Ужины (5 дней)'
+            };
+
+            const tagClassMap = { 'ПП': 'pp', 'veg': 'veg', 'sport': 'sport' };
+
+            let html = '';
+
+            // Саммари
+            html += `
+      <div class="recom-summary">
+        <div class="left">
+          <div class="t">Итого по плану</div>
+          <div class="v">${totalPrice} ₽</div>
+        </div>
+        <div class="right">
+          <div class="saved">−${saved} ₽ скидка</div>
+        </div>
+      </div>
+    `;
+
+            // Нутриенты
+            html += `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px">
+        <div style="background:#fff3c4;border-radius:10px;padding:8px;text-align:center">
+          <div style="font-weight:800;font-size:14px;color:#7a5a00">~${plan.kcal}</div>
+          <div style="font-size:10px;color:#7a5a00">ккал/день</div>
+        </div>
+        <div style="background:#e8f5e9;border-radius:10px;padding:8px;text-align:center">
+          <div style="font-weight:800;font-size:14px;color:#2a8c3a">Б ${plan.protein}г</div>
+          <div style="font-size:10px;color:#2a8c3a">белок/день</div>
+        </div>
+        <div style="background:#e3f2fd;border-radius:10px;padding:8px;text-align:center">
+          <div style="font-weight:800;font-size:14px;color:#1565c0">5 дней</div>
+          <div style="font-size:10px;color:#1565c0">${itemCount * 5} приёмов</div>
+        </div>
+      </div>
+    `;
+
+            // Продукты по группам
+            for (const meal of ['breakfast', 'lunch', 'dinner']) {
+                html += `<div class="recom-day">${mealLabels[meal]}</div>`;
+                for (const p of products[meal]) {
+                    const tagsHtml = p.tags.map(t => {
+                        const cls = tagClassMap[t] || '';
+                        return `<span class="${cls}">${t}</span>`;
+                    }).join('');
+
+                    html += `
+          <div class="product">
+            <div class="product-img">${p.emoji}</div>
+            <div class="product-info">
+              <div class="product-name">${p.name}</div>
+              <div class="product-meta">
+                <span class="kcal">${p.kcal}</span>
+                ${tagsHtml}
+                <span>${p.qty}</span>
+              </div>
+              <div class="product-bottom">
+                <div>
+                  ${p.displayOld ? `<span class="product-old">${p.displayOld} ₽</span>` : ''}
+                  <span class="product-price">${p.displayPr} ₽</span>
+                </div>
+                ${p.disc ? `<span class="product-discount">${p.disc}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+                }
+            }
+
+            // Подсказки в зависимости от диеты
+            const tips = {
+                pp: '🥗 Все продукты подобраны с минимумом сахара и максимумом белка',
+                normal: '🍕 Классические продукты, которые вы любите — по выгодным ценам',
+                sport: '💪 Высокобелковый рацион для поддержки тренировок и восстановления',
+                veg: '🌱 Растительный белок и все необходимые нутриенты без мяса',
+                any: '✨ Сбалансированный набор — и полезно, и вкусно'
+            };
+
+            html += `
+      <div style="background:#fff8e1;border-radius:12px;padding:12px;margin-top:14px;font-size:12px;color:#7a5a00;display:flex;gap:8px">
+        <span>${tips[diet].split(' ')[0]}</span>
+        <div>${tips[diet].substring(2)}. <b>Не нравится товар — замени в один клик</b></div>
+      </div>
+    `;
+
+            document.getElementById('recomBody').innerHTML = html;
+            document.getElementById('recomBtn').textContent = `Оформить · ${totalPrice} ₽`;
+
+            // Сохраняем данные для результата
+            window._orderData = { totalPrice, totalOld, saved, itemCount, plan, diet };
+        }
+
+        // === РЕНДЕР РЕЗУЛЬТАТА ===
+        function renderResult() {
+            const d = window._orderData;
+            if (!d) return;
+
+            const bonus = Math.round(d.totalPrice * 0.05);
+            const dietNames = { pp: 'ПП-рацион', normal: 'Домашний рацион', sport: 'Спорт-рацион', veg: 'Вег-рацион', any: 'Сбалансированный рацион' };
+            const pickupTimes = ['через 45 мин', 'через 1 час', 'через 1,5 часа', 'через 2 часа'];
+            const pickupTime = pickupTimes[Math.floor(Math.random() * pickupTimes.length)];
+            const addresses = ['ул. Ленина 12', 'пр. Мира 45', 'ул. Гагарина 8', 'ул. Пушкина 23'];
+            const address = addresses[Math.floor(Math.random() * addresses.length)];
+
+            const assemblyTime = Math.max(25, Math.round(d.itemCount * 3.2));
+
+            document.getElementById('resultContent').innerHTML = `
+      <div class="result-check">✓</div>
+      <div class="result-title">Заказ оформлен!</div>
+      <div class="result-sub">Самовывоз ${pickupTime} · Магнит, ${address}</div>
+
+      <div class="result-saved-card">
+        <div class="label">💰 ВЫ СЭКОНОМИЛИ</div>
+        <div class="amount">${d.saved} ₽</div>
+        <div class="desc">на скидках и программе лояльности M+</div>
+      </div>
+
+      <div class="result-info-card">
+        <div class="result-info-icon">🛒</div>
+        <div class="result-info-text">
+          <div class="t">Сумма заказа</div>
+          <div class="v">${d.totalPrice} ₽ <span style="color:#aaa;text-decoration:line-through;font-size:12px;font-weight:500">${d.totalOld} ₽</span></div>
+        </div>
+      </div>
+      <div class="result-info-card">
+        <div class="result-info-icon">📦</div>
+        <div class="result-info-text">
+          <div class="t">Товаров в заказе</div>
+          <div class="v">${d.itemCount} позиций · на 5 дней</div>
+        </div>
+      </div>
+      <div class="result-info-card">
+        <div class="result-info-icon">🔥</div>
+        <div class="result-info-text">
+          <div class="t">Калорийность рациона</div>
+          <div class="v">~${d.plan.kcal} ккал/день · ${dietNames[d.diet] || 'сбалансировано'}</div>
+        </div>
+      </div>
+      <div class="result-info-card">
+        <div class="result-info-icon">⏱️</div>
+        <div class="result-info-text">
+          <div class="t">Время на сборку корзины</div>
+          <div class="v">${assemblyTime} секунд · вместо ~30 минут</div>
+        </div>
+      </div>
+
+      <div class="result-bonus">
+        🎁 Начислено <b>+${bonus} M+</b> на следующий заказ
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-primary" onclick="showToast('QR для самовывоза готов 📱')">Показать QR для самовывоза</button>
+        <button class="btn-outline" onclick="goTo('screen-home'); resetFlow()">Вернуться на главную</button>
+      </div>
+    `;
+        }
+
+        // Перехватываем переход на результат
+        const origGoTo = goTo;
+        goTo = function (id) {
+            if (id === 'screen-result') renderResult();
+            origGoTo(id);
+        };
+
+        function resetFlow() {
+            selectedDiet = null;
+            selectedPlan = null;
+            window._orderData = null;
+            document.querySelectorAll('.diet-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('dietNext').disabled = true;
+            document.getElementById('plansNext').disabled = true;
+            updateBudget(1500);
+        }
+
+        // === ТОСТ ===
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+    </script>
 </body>
+
 </html>
